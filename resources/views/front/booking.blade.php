@@ -358,21 +358,10 @@
                                 if (this.selectedDateFull === e.date) {
                                     // Refresh data slot jam
                                     this.fetchSlots(e.date);
-
+                                    
                                     // Reset pilihan User 2 agar dia tidak bisa lanjut submit
                                     this.selectedTime = null;
                                     this.selectedTimes = [];
-
-                                    // Beri tahu User 2 bahwa ada slot yang baru saja dibeli orang lain
-                                    Swal.fire({
-                                        title: 'Jadwal Terupdate!',
-                                        text: 'Seseorang baru saja menyelesaikan pembayaran di tanggal ini. Jadwal telah diperbarui.',
-                                        icon: 'info',
-                                        toast: true,
-                                        position: 'top-end',
-                                        showConfirmButton: false,
-                                        timer: 4000
-                                    });
                                 }
                             });
                     }

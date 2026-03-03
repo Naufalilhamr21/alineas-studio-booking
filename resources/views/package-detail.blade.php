@@ -15,11 +15,6 @@
                     class="hidden lg:flex text-center bg-red-700 text-white items-center my-1 px-6 py-2 text-sm lg:text-base rounded-full font-bold hover:bg-red-800 transition">
                     Booking
                 </a>
-
-                <a href="{{ route('gallery', ['package' => $package->id]) }}"
-                    class="lg:hidden flex text-center bg-white text-gray-900 items-center my-1 px-5 py-1.5 text-sm rounded-full font-bold hover:bg-gray-100 transition border border-gray-700">
-                    Gallery
-                </a>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
