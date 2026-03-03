@@ -349,15 +349,31 @@
                                 this.removeLock(e.date, e.time);
                             })
                             .listen('.BookingPaid', (e) => {
-                                console.log('Ada yang lunas di tanggal:', e.date);
+                                console.log('Hore! Ada yang lunas di tanggal:', e.date);
 
-                                // Jika User 2 sedang melihat tanggal yang sama, refresh kotak jamnya
-                                if (this.selectedDateFull === e.date) {
-                                    this.fetchSlots(e.date);
-                                }
-
-                                // Refresh juga status titik merah/penuh di kalender utama
+                                // Refresh status titik di kalender utama
                                 this.fetchCalendarStatus();
+
+                                // Jika User 2 sedang melihat tanggal yang lunas tersebut
+                                if (this.selectedDateFull === e.date) {
+                                    // Refresh data slot jam
+                                    this.fetchSlots(e.date);
+
+                                    // Reset pilihan User 2 agar dia tidak bisa lanjut submit
+                                    this.selectedTime = null;
+                                    this.selectedTimes = [];
+
+                                    // Beri tahu User 2 bahwa ada slot yang baru saja dibeli orang lain
+                                    Swal.fire({
+                                        title: 'Jadwal Terupdate!',
+                                        text: 'Seseorang baru saja menyelesaikan pembayaran di tanggal ini. Jadwal telah diperbarui.',
+                                        icon: 'info',
+                                        toast: true,
+                                        position: 'top-end',
+                                        showConfirmButton: false,
+                                        timer: 4000
+                                    });
+                                }
                             });
                     }
                 },
