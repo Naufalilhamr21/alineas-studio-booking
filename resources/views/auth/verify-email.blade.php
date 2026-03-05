@@ -22,12 +22,11 @@
             </div>
         </div>
 
-        <h2 class="text-2xl font-bold text-gray-800 mb-3">Cek Kotak Masuk Anda</h2>
+        <h2 class="text-xl font-bold text-gray-800 mb-3">Cek Email Anda</h2>
 
         <p class="text-gray-500 mb-6 text-sm leading-relaxed">
-            Terima kasih telah mendaftar di <strong>Alineas Studio</strong>! Kami baru saja mengirimkan link verifikasi
-            ke alamat
-            email Anda. Silakan klik tautan tersebut untuk mengaktifkan akun.
+            <strong>Terima kasih telah mendaftar!</strong> Silakan cek email Anda dan klik tautan verifikasi untuk
+            mengaktifkan akun.
         </p>
 
         @if (session('status') == 'verification-link-sent')
@@ -40,7 +39,7 @@
             <form method="POST" action="{{ route('verification.send') }}">
                 @csrf
                 <button type="submit"
-                    class="w-full bg-[#b91c1c] hover:bg-red-800 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 shadow-md hover:shadow-lg focus:ring-4 focus:ring-red-200">
+                    class="w-full bg-red-600 hover:bg-red-800 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 shadow-md hover:shadow-lg focus:ring-4 focus:ring-red-200">
                     Kirim Ulang Email Verifikasi
                 </button>
             </form>
