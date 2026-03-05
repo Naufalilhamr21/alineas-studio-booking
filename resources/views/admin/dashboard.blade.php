@@ -32,7 +32,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-bold text-xl text-gray-900 mb-1">Paket & Harga</h3>
+                        <h3 class="font-bold text-lg text-gray-900 mb-1">Paket & Harga</h3>
                         <p class="text-sm text-gray-500 leading-relaxed">Kelola daftar paket foto dan atur harga foto
                             studio.</p>
                     </div>
@@ -54,7 +54,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-bold text-xl text-gray-900 mb-1">Galeri Foto</h3>
+                        <h3 class="font-bold text-lg text-gray-900 mb-1">Galeri Foto</h3>
                         <p class="text-sm text-gray-500 leading-relaxed">Unggah hasil jepretan terbaik untuk menarik
                             lebih banyak pelanggan.</p>
                     </div>
@@ -76,7 +76,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="font-bold text-xl text-gray-900 mb-1">Data Transaksi</h3>
+                        <h3 class="font-bold text-lg text-gray-900 mb-1">Data Transaksi</h3>
                         <p class="text-sm text-gray-500 leading-relaxed">Pantau jadwal booking masuk, verifikasi DP, dan
                             pelunasan foto studio.</p>
                     </div>
@@ -130,7 +130,6 @@
                                     </div>
                                     <div
                                         class="text-xs text-gray-500 mt-1 font-medium bg-gray-100 px-2 py-1 rounded inline-block">
-                                        ⏰
                                         {{ \Carbon\Carbon::parse($booking->start_time)->timezone('Asia/Jakarta')->format('H:i') }}
                                         -
                                         {{ \Carbon\Carbon::parse($booking->end_time)->timezone('Asia/Jakarta')->format('H:i') }}
