@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
-use App\Events\BookingPaid;
-use App\Events\NewBookingCreated;
 use App\Http\Controllers\Controller;
-use App\Mail\AdminNewBookingMail;
 use App\Models\Booking;
 use App\Models\BookingLock;
 use App\Models\Package;
@@ -14,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Midtrans\Config;

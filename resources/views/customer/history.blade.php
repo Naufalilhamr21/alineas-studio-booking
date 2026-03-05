@@ -43,7 +43,7 @@
                                         <th class="pb-4">Keuangan</th>
                                         <th class="pb-4">Status Transaksi</th>
                                         <th class="pb-4">Hasil Foto</th>
-                                        <th class="pb-4 text-center">Aksi</th>
+                                        <th class="pb-4">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-100 text-sm">
