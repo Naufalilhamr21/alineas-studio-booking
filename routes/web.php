@@ -1,13 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LandingController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\PackageController;
-use App\Http\Controllers\Front\BookingController;
 use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Front\BookingController;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\ProfileController;
+use App\Models\Booking;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,9 +69,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     */
     Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
         
-        // Dashboard Admin (Statistik)
+        // Dashboard Admin
         Route::get('/dashboard', function () {
-            return view('admin.dashboard');
+            // Ambil 5 jadwal foto yang akan datang, khusus yang SUDAH LUNAS / DP (paid)
+            $upcomingBookings = Booking::with(['user', 'package'])
+                ->where('status', 'paid')
+                ->where('start_time', '>=', now()) // Hanya jadwal hari ini ke depan
+                ->orderBy('start_time', 'asc') // Urutkan dari yang paling dekat
+                ->take(5) // Ambil 5 teratas
+                ->get();
+
+            return view('admin.dashboard', compact('upcomingBookings'));
         })->name('dashboard');
 
         // CRUD: Packages & Galleries
