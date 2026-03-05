@@ -1,31 +1,60 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-    </div>
+<!DOCTYPE html>
+<html lang="id">
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
-    @endif
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Verifikasi Email - Alineas Studio</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
 
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
-            @csrf
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4 font-sans antialiased">
+    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full text-center border border-gray-100">
 
-            <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
-                </x-primary-button>
+        <div class="flex justify-center mb-6">
+            <div class="bg-red-50 p-4 rounded-full">
+                <svg class="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                    </path>
+                </svg>
             </div>
-        </form>
+        </div>
 
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
+        <h2 class="text-2xl font-bold text-gray-800 mb-3">Cek Kotak Masuk Anda</h2>
 
-            <button type="submit" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                {{ __('Log Out') }}
-            </button>
-        </form>
+        <p class="text-gray-500 mb-6 text-sm leading-relaxed">
+            Terima kasih telah mendaftar di <strong>Alineas Studio</strong>! Kami baru saja mengirimkan link verifikasi
+            ke alamat
+            email Anda. Silakan klik tautan tersebut untuk mengaktifkan akun.
+        </p>
+
+        @if (session('status') == 'verification-link-sent')
+            <div class="mb-6 p-4 text-sm text-green-700 bg-green-50 border border-green-200 rounded-xl">
+                Tautan verifikasi yang baru telah berhasil dikirim ke email Anda!
+            </div>
+        @endif
+
+        <div class="flex flex-col gap-3">
+            <form method="POST" action="{{ route('verification.send') }}">
+                @csrf
+                <button type="submit"
+                    class="w-full bg-[#b91c1c] hover:bg-red-800 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 shadow-md hover:shadow-lg focus:ring-4 focus:ring-red-200">
+                    Kirim Ulang Email Verifikasi
+                </button>
+            </form>
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit"
+                    class="w-full bg-white hover:bg-gray-50 text-gray-600 font-medium py-3 px-4 rounded-xl transition duration-200 border border-gray-200">
+                    Masuk dengan akun lain
+                </button>
+            </form>
+        </div>
+
     </div>
-</x-guest-layout>
+</body>
+
+</html>

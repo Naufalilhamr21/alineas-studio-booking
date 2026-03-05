@@ -67,6 +67,6 @@ class RegisteredUserController extends Controller
 
         // Auth::login($user);
 
-        return redirect()->route('login')->with('status', 'Registrasi berhasil! Silakan login untuk melanjutkan.');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan cek Kotak Masuk atau folder Spam di email Anda untuk melakukan verifikasi.');
     }
 }
