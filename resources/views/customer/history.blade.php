@@ -204,7 +204,7 @@
                                                         </a>
                                                     @else
                                                         <span
-                                                            class="text-green-600 text-xs font-bold flex items-center justify-center gap-1">
+                                                            class="text-gray-700 text-xs font-bold flex items-center justify-center gap-1">
                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                                 viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
