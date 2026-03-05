@@ -11,7 +11,14 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         if ($user->role === 'admin') {
-            return view('admin.dashboard');
+            $upcomingBookings = \App\Models\Booking::with(['user', 'package'])
+                ->where('status', 'paid')
+                ->where('start_time', '>=', now())
+                ->orderBy('start_time', 'asc')
+                ->take(5)
+                ->get();
+                
+            return view('admin.dashboard', compact('upcomingBookings'));
         }
         // Kalau customer buka /dashboard, lempar ke home
         return redirect()->route('home');
