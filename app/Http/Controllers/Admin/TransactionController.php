@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\Events\BookingPaid; // Wajib untuk refresh kalender realtime
 
 class TransactionController extends Controller
 {
@@ -33,7 +35,7 @@ class TransactionController extends Controller
 
     public function complete($id)
     {
-        $booking = \App\Models\Booking::findOrFail($id);
+        $booking = Booking::findOrFail($id);
 
         // Ubah sisa tagihan menjadi 0
         $booking->update([
@@ -49,11 +51,69 @@ class TransactionController extends Controller
             'google_drive_link' => 'required|url' // Wajib diisi dan harus format URL/Link
         ]);
 
-        $booking = \App\Models\Booking::findOrFail($id);
+        $booking = Booking::findOrFail($id);
         $booking->update([
             'google_drive_link' => $request->google_drive_link
         ]);
 
         return back()->with('success', 'Link Google Drive berhasil disimpan!');
+    }
+
+    // --- FUNGSI RESCHEDULE PINDAH KE SINI ---
+    public function reschedule(Request $request, $id)
+    {
+        // 1. Validasi input dari Admin (Tanggal & Jam Baru)
+        $request->validate([
+            'date' => 'required|date',
+            'time' => 'required|date_format:H:i',
+        ]);
+
+        $booking = Booking::findOrFail($id);
+        $package = $booking->package;
+        
+        $startTime = Carbon::createFromFormat('Y-m-d H:i', "{$request->date} {$request->time}", 'Asia/Jakarta');
+        $endTime = $startTime->copy()->addMinutes($package->duration_minutes);
+        
+        $startUtc = $startTime->copy()->setTimezone('UTC');
+        $endUtc = $endTime->copy()->setTimezone('UTC');
+
+        // 2. Cek Bentrok (Kecualikan ID jadwal lama milik pelanggan ini sendiri)
+        $conflict = Booking::where('id', '!=', $booking->id)
+            ->where(function($query) {
+                $query->where('status', 'paid')
+                      ->orWhere(function($q) {
+                          $q->where('status', 'unpaid')
+                            ->where('created_at', '>=', now()->subMinutes(15));
+                      });
+            })
+            ->where('start_time', '<', $endUtc)
+            ->where('end_time', '>', $startUtc)
+            ->exists();
+
+        if ($conflict) {
+            // Jika Admin milih jam yang ternyata sudah ada isinya
+            return back()->with('error', 'Gagal Reschedule: Jadwal baru bentrok dengan pelanggan lain.');
+        }
+
+        // 3. Simpan tanggal lama sebelum ditimpa (untuk refresh kalender publik)
+        $oldDateWib = Carbon::parse($booking->start_time)->setTimezone('Asia/Jakarta')->format('Y-m-d');
+        
+        // 4. Update data di database
+        $booking->update([
+            'start_time' => $startUtc,
+            'end_time' => $endUtc,
+        ]);
+
+        // 5. Beritahu Publik via Pusher (Magic!)
+        // Refresh tanggal lama agar kembali KOSONG
+        broadcast(new BookingPaid($oldDateWib));
+        
+        // Refresh tanggal baru agar langsung TERKUNCI
+        $newDateWib = $startTime->format('Y-m-d');
+        if ($oldDateWib !== $newDateWib) {
+            broadcast(new BookingPaid($newDateWib));
+        }
+
+        return back()->with('success', 'Jadwal pelanggan berhasil dipindahkan!');
     }
 }
