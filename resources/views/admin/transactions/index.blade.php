@@ -9,6 +9,10 @@
         confirmColor: '',
         iconColor: '',
     
+        // --- TAMBAHAN VARIABEL UNTUK MODAL RESCHEDULE ---
+        isRescheduleModalOpen: false,
+        rescheduleUrl: '',
+    
         openModal(type, url) {
             this.actionUrl = url;
             this.isModalOpen = true;
@@ -35,6 +39,12 @@
                 this.confirmColor = 'bg-blue-600 hover:bg-blue-700';
                 this.iconColor = 'text-blue-600 bg-blue-100';
             }
+        },
+    
+        // --- TAMBAHAN FUNGSI BUKA MODAL RESCHEDULE ---
+        openRescheduleModal(url) {
+            this.rescheduleUrl = url;
+            this.isRescheduleModalOpen = true;
         }
     }">
 
@@ -51,6 +61,19 @@
                     </p>
                 </div>
             </div>
+
+            @if (session('error'))
+                <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4 text-red-700">
+                    <p class="font-bold">Gagal!</p>
+                    <p>{{ session('error') }}</p>
+                </div>
+            @endif
+            @if (session('success'))
+                <div class="mb-4 bg-green-50 border-l-4 border-green-500 p-4 text-green-700">
+                    <p class="font-bold">Berhasil!</p>
+                    <p>{{ session('success') }}</p>
+                </div>
+            @endif
 
             <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-200">
                 <div class="overflow-x-auto hide-scrollbar">
@@ -88,9 +111,10 @@
                                         <div class="font-bold text-gray-700">{{ $booking->package->name }}</div>
                                         <div class="text-xs text-gray-500 mt-1">
                                             {{ $booking->start_time->timezone('Asia/Jakarta')->format('d M Y') }}<br>
-                                            {{ $booking->start_time->timezone('Asia/Jakarta')->format('H:i') }}
-                                            -
-                                            {{ $booking->end_time->timezone('Asia/Jakarta')->format('H:i') }}
+                                            <span class="font-bold text-gray-700">
+                                                {{ $booking->start_time->timezone('Asia/Jakarta')->format('H:i') }} -
+                                                {{ $booking->end_time->timezone('Asia/Jakarta')->format('H:i') }}
+                                            </span>
                                         </div>
                                     </td>
 
@@ -122,7 +146,8 @@
                                             </span>
                                         @elseif($booking->status == 'paid' && $booking->remaining_balance > 0)
                                             <span
-                                                class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200">SUDAH DP</span>
+                                                class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold border border-blue-200">SUDAH
+                                                DP</span>
                                         @elseif($booking->status == 'unpaid')
                                             <span
                                                 class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold border border-yellow-200">BELUM
@@ -142,7 +167,6 @@
                                                 placeholder="https://drive..."
                                                 class="text-xs border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 w-32 px-2 py-1.5"
                                                 required>
-
                                             <button type="submit"
                                                 class="bg-gray-800 text-white p-1.5 rounded-lg hover:bg-gray-700 transition"
                                                 title="Simpan Link">
@@ -154,7 +178,6 @@
                                                     </path>
                                                 </svg>
                                             </button>
-
                                             @if ($booking->google_drive_link)
                                                 <a href="{{ $booking->google_drive_link }}" target="_blank"
                                                     class="bg-blue-100 text-blue-600 p-1.5 rounded-lg hover:bg-blue-200 transition"
@@ -173,6 +196,7 @@
 
                                     <td class="p-4">
                                         <div class="flex items-center justify-center gap-2">
+
                                             @if ($booking->status == 'unpaid')
                                                 <button
                                                     @click="openModal('approve', '{{ route('admin.transactions.approve', $booking->id) }}')"
@@ -202,6 +226,25 @@
                                                 </button>
                                             @endif
 
+                                            @if ($booking->status == 'paid')
+                                                <button
+                                                    @click="openRescheduleModal('{{ route('admin.bookings.reschedule', $booking->id) }}')"
+                                                    type="button"
+                                                    class="bg-purple-600 text-white p-2 rounded-lg hover:bg-purple-700 transition shadow-sm"
+                                                    title="Reschedule Jadwal Pelanggan">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                                        </path>
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M12 12v-3m0 0v3m0 0l3 3m-3-3l-3 3">
+                                                        </path>
+                                                    </svg>
+                                                </button>
+                                            @endif
+
                                             <button
                                                 @click="openModal('delete', '{{ route('admin.transactions.destroy', $booking->id) }}')"
                                                 type="button"
@@ -220,7 +263,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-10">
+                                    <td colspan="6" class="text-center py-10 text-gray-500 font-medium">
+                                        Belum ada data transaksi.
                                     </td>
                                 </tr>
                             @endforelse
@@ -234,22 +278,11 @@
             <div x-show="isModalOpen"
                 class="fixed inset-0 z-[99] flex items-center justify-center min-h-screen px-4 py-6 sm:px-0"
                 style="display: none;">
-
-                <div x-show="isModalOpen" x-transition:enter="ease-out duration-300"
-                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                    x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0"
-                    class="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-70 backdrop-blur-sm"
-                    @click="isModalOpen = false"></div>
-
-                <div x-show="isModalOpen" x-transition:enter="ease-out duration-300"
-                    x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                    x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                    x-transition:leave="ease-in duration-200"
-                    x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                    x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                <div x-show="isModalOpen" x-transition.opacity
+                    class="fixed inset-0 bg-gray-900 bg-opacity-70 backdrop-blur-sm" @click="isModalOpen = false">
+                </div>
+                <div x-show="isModalOpen" x-transition
                     class="relative w-full max-w-sm overflow-hidden transition-all transform bg-white rounded-2xl shadow-xl">
-
                     <div class="p-6 text-center">
                         <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full mb-4"
                             :class="iconColor">
@@ -258,31 +291,85 @@
                                     d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
                         </div>
-
                         <h3 class="text-lg font-bold text-gray-900" x-text="modalTitle"></h3>
                         <p class="mt-2 text-sm text-gray-500" x-text="modalMessage"></p>
                     </div>
-
                     <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-between gap-3">
                         <form :action="actionUrl" method="POST" class="w-full">
                             @csrf
                             <template x-if="actionMethod === 'DELETE'">
                                 <input type="hidden" name="_method" value="DELETE">
                             </template>
-
                             <button type="submit" :class="confirmColor"
-                                class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none sm:text-sm transition"
-                                x-text="confirmText">
-                            </button>
+                                class="w-full inline-flex justify-center rounded-lg shadow-sm px-4 py-2 font-medium text-white transition"
+                                x-text="confirmText"></button>
                         </form>
-
                         <button @click="isModalOpen = false" type="button"
-                            class="w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:text-sm transition">
-                            Batal
-                        </button>
+                            class="w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white font-medium text-gray-700 hover:bg-gray-50 transition">Batal</button>
                     </div>
                 </div>
             </div>
         </template>
+
+        <template x-teleport="body">
+            <div x-show="isRescheduleModalOpen"
+                class="fixed inset-0 z-[99] flex items-center justify-center min-h-screen px-4 py-6 sm:px-0"
+                style="display: none;">
+                <div x-show="isRescheduleModalOpen" x-transition.opacity
+                    class="fixed inset-0 bg-gray-900 bg-opacity-70 backdrop-blur-sm"
+                    @click="isRescheduleModalOpen = false"></div>
+
+                <div x-show="isRescheduleModalOpen" x-transition
+                    class="relative w-full max-w-md overflow-hidden transition-all transform bg-white rounded-2xl shadow-xl">
+                    <form :action="rescheduleUrl" method="POST">
+                        @csrf
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-5 border-b border-gray-100 pb-4">
+                                <div class="bg-purple-100 text-purple-600 p-2 rounded-full">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-900">Reschedule Jadwal</h3>
+                                    <p class="text-sm text-gray-500">Pindahkan jadwal pelanggan ke waktu baru.</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Pilih Tanggal
+                                        Baru</label>
+                                    <input type="date" name="date" required
+                                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Pilih Jam
+                                        Baru</label>
+                                    <input type="time" name="time" required
+                                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500">
+                                    <span class="text-xs text-gray-500 mt-1 block">*Sistem otomatis akan mengecek jika
+                                        jam ini bertabrakan dengan pelanggan lain.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+                            <button @click="isRescheduleModalOpen = false" type="button"
+                                class="inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                                Batal
+                            </button>
+                            <button type="submit"
+                                class="inline-flex justify-center rounded-lg shadow-sm px-4 py-2 bg-purple-600 hover:bg-purple-700 text-sm font-medium text-white transition">
+                                Simpan Jadwal Baru
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </template>
+
     </div>
 </x-app-layout>

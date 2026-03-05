@@ -83,6 +83,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/transactions/{booking}', [TransactionController::class, 'destroy'])->name('transactions.destroy');
         Route::post('/transactions/{transaction}/complete', [TransactionController::class, 'complete'])->name('transactions.complete');
         Route::post('/transactions/{transaction}/drive', [TransactionController::class, 'updateDrive'])->name('transactions.drive');
+
+        // Reschedule
+        Route::post('/bookings/{booking}/reschedule', [BookingController::class, 'reschedule'])->name('admin.bookings.reschedule');
     });
 
 });
