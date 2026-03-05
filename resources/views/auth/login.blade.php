@@ -26,7 +26,19 @@
                 </p>
             </div>
 
-            <x-auth-session-status class="mb-4" :status="session('status')" />
+            @if (session('success'))
+                <div
+                    class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-4 rounded-xl shadow-sm text-sm font-medium flex items-start gap-3">
+                    <svg class="w-6 h-6 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+
+            <x-auth-session-status class="mb-6" :status="session('status')" />
 
             <form method="POST" action="{{ route('login') }}" class="space-y-6" novalidate>
                 @csrf
