@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Gallery;
 use App\Models\Package;
-use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
@@ -26,7 +25,7 @@ class LandingController extends Controller
         return view('pricelist', compact('packages'));
     }
 
-    public function show(\App\Models\Package $package)
+    public function show(Package $package)
     {
         $latestPhotos = $package->galleries()->latest()->take(4)->get();
 
@@ -36,10 +35,10 @@ class LandingController extends Controller
     public function gallery()
     {
         // 1. Ambil semua paket yang MEMILIKI galeri saja (agar tab filter tidak kosong)
-        $packages = \App\Models\Package::has('galleries')->get();
+        $packages = Package::has('galleries')->get();
 
         // 2. Ambil semua foto galeri urut terbaru (Eager load paketnya biar ringan)
-        $galleries = \App\Models\Gallery::with('package')->latest()->get();
+        $galleries = Gallery::with('package')->latest()->get();
 
 
         return view('gallery', compact('packages', 'galleries'));
