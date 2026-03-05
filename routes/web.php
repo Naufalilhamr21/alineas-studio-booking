@@ -85,7 +85,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/transactions/{transaction}/drive', [TransactionController::class, 'updateDrive'])->name('transactions.drive');
 
         // Reschedule
-        Route::post('/bookings/{booking}/reschedule', [BookingController::class, 'reschedule'])->name('admin.bookings.reschedule');
+        Route::post('/bookings/{booking}/reschedule', [TransactionController::class, 'reschedule'])->name('bookings.reschedule');
     });
 
 });

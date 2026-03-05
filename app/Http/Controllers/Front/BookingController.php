@@ -399,12 +399,12 @@ class BookingController extends Controller
 
         // 5. Beritahu Publik via Pusher (Magic!)
         // Refresh tanggal lama agar kembali KOSONG
-        broadcast(new \App\Events\BookingPaid($oldDateWib));
+        broadcast(new BookingPaid($oldDateWib));
         
         // Refresh tanggal baru agar langsung TERKUNCI
         $newDateWib = $startTime->format('Y-m-d');
         if ($oldDateWib !== $newDateWib) {
-            broadcast(new \App\Events\BookingPaid($newDateWib));
+            broadcast(new BookingPaid($newDateWib));
         }
 
         return back()->with('success', 'Jadwal pelanggan berhasil dipindahkan!');
