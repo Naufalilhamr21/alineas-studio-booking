@@ -35,7 +35,7 @@
                     </label>
                     <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus
                         class="block w-full rounded-xl border-gray-400 px-4 py-3 text-gray-900 shadow-sm focus:border-red-600 focus:ring-red-600 sm:text-sm {{ $errors->has('name') ? 'border-red-500 ring-red-500' : '' }}"
-                        style="border-radius: 10px;" placeholder="Contoh: Bahlil Babi">
+                        style="border-radius: 10px;" placeholder="Contoh: Jhon Doe">
 
                     @error('name')
                         <p class="mt-2 text-xs font-bold text-red-600 flex items-center gap-1">
