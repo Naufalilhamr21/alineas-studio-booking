@@ -2,107 +2,68 @@
 <html>
 
 <head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9fafb;
-            padding: 20px;
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 600px;
-            margin: 0 auto;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #fee2e2;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-
-        .header h2 {
-            color: #b91c1c;
-            margin: 0;
-        }
-
-        .content p {
-            font-size: 15px;
-            color: #374151;
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-
-        .details {
-            background-color: #f3f4f6;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-
-        .details p {
-            margin: 8px 0;
-        }
-
-        .details strong {
-            color: #111827;
-            display: inline-block;
-            min-width: 120px;
-        }
-
-        .btn-container {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .btn {
-            background-color: #b91c1c;
-            color: #ffffff;
-            padding: 12px 24px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            display: inline-block;
-        }
-    </style>
+    <meta charset="utf-8">
+    <title>Booking Baru Masuk</title>
 </head>
 
-<body>
-    <div class="container">
-        <div class="header">
-            <h2>Hore! Ada Booking Baru Masuk 📸</h2>
+<body style="font-family: Arial, sans-serif; background-color: #f9fafb; padding: 20px; margin: 0;">
+
+    <div
+        style="background-color: #ffffff; padding: 30px; border-radius: 10px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);">
+
+        <div style="text-align: center; border-bottom: 2px solid #fee2e2; padding-bottom: 20px; margin-bottom: 20px;">
+            <h2 style="color: #b91c1c; margin: 0; font-size: 24px;">Hore! Ada Booking Baru (LUNAS) 📸</h2>
         </div>
 
-        <div class="content">
-            <p>Halo Admin Alineas Studio,</p>
-            <p>Sistem baru saja menerima pesanan masuk yang sedang menunggu pembayaran DP. Berikut adalah rinciannya:
-            </p>
+        <div style="color: #374151; font-size: 15px; line-height: 1.6;">
+            <p style="margin-top: 0;">Halo Admin Alineas Studio,</p>
+            <p>Kabar gembira! Sistem baru saja menerima pesanan masuk dan pelanggan <strong>telah berhasil melakukan
+                    pembayaran</strong>. Berikut rincian jadwal yang telah dikunci otomatis:</p>
 
-            <div class="details">
-                <p><strong>Kode Booking:</strong> {{ $booking->booking_code }}</p>
-                <p><strong>Nama Klien:</strong> {{ $booking->user->name }}</p>
-                <p><strong>No. HP/WA:</strong> {{ $booking->user->phone ?? '-' }}</p>
-                <p><strong>Paket:</strong> {{ $booking->package->name }}</p>
-                <p><strong>Tanggal:</strong>
+            <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <p style="margin: 8px 0;">
+                    <strong style="color: #111827; display: inline-block; width: 130px;">Kode Booking</strong> :
+                    {{ $booking->booking_code }}
+                </p>
+                <p style="margin: 8px 0;">
+                    <strong style="color: #111827; display: inline-block; width: 130px;">Nama Klien</strong> :
+                    {{ $booking->user->name }}
+                </p>
+                <p style="margin: 8px 0;">
+                    <strong style="color: #111827; display: inline-block; width: 130px;">No. HP/WA</strong> :
+                    {{ $booking->user->phone ?? '-' }}
+                </p>
+                <p style="margin: 8px 0;">
+                    <strong style="color: #111827; display: inline-block; width: 130px;">Paket</strong> :
+                    {{ $booking->package->name }}
+                </p>
+                <p style="margin: 8px 0;">
+                    <strong style="color: #111827; display: inline-block; width: 130px;">Tanggal</strong> :
                     {{ \Carbon\Carbon::parse($booking->start_time)->timezone('Asia/Jakarta')->locale('id')->isoFormat('dddd, D MMMM Y') }}
                 </p>
-                <p><strong>Jam:</strong>
+                <p style="margin: 8px 0;">
+                    <strong style="color: #111827; display: inline-block; width: 130px;">Jam</strong> :
                     {{ \Carbon\Carbon::parse($booking->start_time)->timezone('Asia/Jakarta')->format('H:i') }} -
-                    {{ \Carbon\Carbon::parse($booking->end_time)->timezone('Asia/Jakarta')->format('H:i') }} WIB</p>
-                <p><strong>Total Harga:</strong> Rp {{ number_format($booking->total_price, 0, ',', '.') }}</p>
+                    {{ \Carbon\Carbon::parse($booking->end_time)->timezone('Asia/Jakarta')->format('H:i') }} WIB
+                </p>
+                <p style="margin: 8px 0;">
+                    <strong style="color: #111827; display: inline-block; width: 130px;">Nominal DP</strong> : Rp
+                    {{ number_format($booking->dp_amount, 0, ',', '.') }}
+                </p>
             </div>
 
-            <p>Sistem akan otomatis membatalkan booking ini jika pelanggan tidak membayar DP dalam waktu 15 menit.</p>
+            <p>Silakan periksa dashboard untuk melihat rincian sisa pelunasan dan mengelola jadwal ini.</p>
 
-            <div class="btn-container">
-                <a href="{{ url('/admin/dashboard') }}" class="btn">Buka Dashboard Admin</a>
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="{{ url('/admin/dashboard') }}"
+                    style="background-color: #b91c1c; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; font-size: 16px;">
+                    Buka Dashboard Admin
+                </a>
             </div>
+
         </div>
     </div>
+
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 <x-frontend-layout>
     <x-slot name="title">Gallery - Alineas Studio</x-slot>
 
-    <div class="relative bg-red-700 pt-10 pb-16 md:pb-20 mb-10">
+    <div class="relative bg-red-700 pt-10 pb-16 md:pb-20 mb-8">
         <div class="absolute bottom-0 left-0 w-full flex flex-col">
             <div class="h-3 md:h-3 w-full"
                 style="background-image: linear-gradient(90deg, transparent 50%, #ffffff 50%); background-size: 24px 100%; md:background-size: 32px 100%;">
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="max-w-7xl mx-4 lg:mx-8 px-4 sm:px-6 lg:px-8 pb-24" x-data="{
+    <div class="max-w-7xl mx-4 lg:mx-8 px-4 sm:px-6 lg:px-8 pb-0 md:pb-16" x-data="{
         activeTab: '{{ request('package', 'all') }}',
         lightboxOpen: false,
         imgUrl: '',
@@ -36,7 +36,7 @@
         }
     }">
 
-        <div class="flex justify-start md:justify-center mb-10 overflow-x-auto pb-4 hide-scrollbar px-4">
+        <div class="flex justify-start md:justify-center mb-8 overflow-x-auto pb-4 hide-scrollbar px-4">
             <div class="inline-flex space-x-2 bg-gray-100 p-1.5 rounded-full whitespace-nowrap">
                 <button @click="activeTab = 'all'"
                     :class="activeTab === 'all' ? 'bg-white text-red-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'"

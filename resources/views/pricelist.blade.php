@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="max-w-7xl mx-4 lg:mx-8 px-4 sm:px-6 lg:px-8 pb-20 pt-16">
+    <div class="max-w-7xl mx-4 lg:mx-8 px-4 sm:px-6 lg:px-8 pb-16 pt-12">
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
             @foreach ($packages as $package)
                 <a href="{{ route('package.show', $package->slug) }}" class="group block">

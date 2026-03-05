@@ -65,7 +65,7 @@
                 <div class="pt-2">
                     <button type="submit"
                         class="flex w-full justify-center rounded-xl bg-red-700 px-3 py-3.5 text-sm font-bold leading-6 text-white shadow-md hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 uppercase tracking-wide transition">
-                        enter
+                        Kirim Link Reset Password
                     </button>
                 </div>
             </form>

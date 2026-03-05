@@ -8,6 +8,9 @@ use App\Models\Booking;
 use Illuminate\Http\Request;
 use Midtrans\Config;
 use Midtrans\Notification;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminNewBookingMail;
+use App\Events\NewBookingCreated;
 
 class MidtransCallbackController extends Controller
 {
@@ -74,7 +77,21 @@ class MidtransCallbackController extends Controller
         // 6. BROADCAST KE FRONTEND JIKA ADA PERUBAHAN STATUS PENTING
         // -------------------------------------------------------------------
         
-        // Jika status berubah menjadi LUNAS atau DIBATALKAN
+        // JIKA STATUS BERUBAH MENJADI LUNAS (PAID) HARI INI
+        if ($oldStatus !== 'paid' && $booking->status === 'paid') {
+            // Notif ke dashboard Admin
+            NewBookingCreated::dispatch($booking);
+
+            // Notif via Email ke Admin
+            try {
+                Mail::to('alineasstudio@gmail.com')->send(new AdminNewBookingMail($booking));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('Gagal kirim email lunas: ' . $e->getMessage());
+            }
+
+        }
+
+        // Refresh Kalender di Frontend jika status berubah menjadi paid atau cancelled
         if ($oldStatus !== $booking->status && in_array($booking->status, ['paid', 'cancelled'])) {
             
             // Ambil tanggal lokal (WIB) dari start_time UTC di database

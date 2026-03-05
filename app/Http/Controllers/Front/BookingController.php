@@ -115,17 +115,17 @@ class BookingController extends Controller
             'status' => 'unpaid',
         ]);
 
-        NewBookingCreated::dispatch($booking);
+        // NewBookingCreated::dispatch($booking);
 
         // --- KODE KIRIM EMAIL ---
-        try {
-            // Ganti alamat ini dengan email yang akan MENERIMA notifikasi (bisa sama dengan pengirim)
-            Mail::to('alineasstudio@gmail.com')->send(new AdminNewBookingMail($booking));
-        } catch (\Exception $e) {
-            // Tangkap error jika email gagal agar tidak merusak proses checkout user
-            \Illuminate\Support\Facades\Log::error('Gagal kirim email notif: ' . $e->getMessage());
-        }
-        // --- AKHIR KODE EMAIL ---
+        // try {
+        //     // Ganti alamat ini dengan email yang akan MENERIMA notifikasi (bisa sama dengan pengirim)
+        //     Mail::to('alineasstudio@gmail.com')->send(new AdminNewBookingMail($booking));
+        // } catch (\Exception $e) {
+        //     // Tangkap error jika email gagal agar tidak merusak proses checkout user
+        //     \Illuminate\Support\Facades\Log::error('Gagal kirim email notif: ' . $e->getMessage());
+        // }
+        // // --- AKHIR KODE EMAIL ---
 
         // Hapus Kuncian
         $slotsNeeded = max(1, ceil($package->duration_minutes / 30));
