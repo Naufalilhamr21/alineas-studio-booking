@@ -27,7 +27,7 @@
                         class="bg-gray-900 h-60 md:h-80 rounded-2xl p-4 flex flex-col justify-between hover:bg-gray-800 transition relative overflow-hidden border hover:border-red-700 hover:border-2">
 
                         @if ($package->thumbnail)
-                            <img src="{{ asset('storage/' . $package->thumbnail) }}"
+                            <img src="{{ Storage::disk('s3')->url($package->thumbnail) }}"
                                 class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 transition duration-500">
                         @endif
 

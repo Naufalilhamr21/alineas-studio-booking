@@ -66,11 +66,13 @@
                         x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0 transform scale-95"
                         x-transition:enter-end="opacity-100 transform scale-100"
-                        class="relative group break-inside-avoid cursor-pointer" {{-- AKSI KLIK: Panggil fungsi openLightbox --}}
-                        @click="openLightbox('{{ asset('storage/' . $gallery->image_path) }}')">
+                        class="relative group break-inside-avoid cursor-pointer" {{-- PERBAIKAN 1: Path gambar untuk modal Lightbox --}}
+                        @click="openLightbox('{{ Storage::disk('s3')->url($gallery->image_path) }}')">
 
                         <div class="aspect-[4/5] w-full overflow-hidden rounded-2xl bg-gray-200 relative">
-                            <img src="{{ asset('storage/' . $gallery->image_path) }}" alt="Gallery Image" loading="lazy"
+                            {{-- PERBAIKAN 2: Path gambar untuk tampilan grid thumbnail --}}
+                            <img src="{{ Storage::disk('s3')->url($gallery->image_path) }}" alt="Gallery Image"
+                                loading="lazy"
                                 class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700">
 
                             <div

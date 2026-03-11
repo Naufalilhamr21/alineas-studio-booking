@@ -45,7 +45,7 @@
                             @forelse ($galleries as $gallery)
                                 <tr class="hover:bg-gray-50 transition">
                                     <td class="p-4">
-                                        <img src="{{ asset('storage/' . $gallery->image_path) }}"
+                                        <img src="{{ Storage::disk('s3')->url($gallery->image_path) }}"
                                             class="w-36 h-36 object-cover rounded-xl bg-gray-100 shadow-sm border border-gray-200">
                                     </td>
 

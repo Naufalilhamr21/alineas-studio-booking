@@ -34,7 +34,7 @@ class GalleryController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('galleries', 'public');
+            $path = $request->file('image')->storePublicly('galleries', 's3');
 
             Gallery::create([
                 'image_path' => $path,
@@ -70,12 +70,12 @@ class GalleryController extends Controller
         // Jika admin mengupload foto baru
         if ($request->hasFile('image')) {
             // Hapus foto lama dari storage
-            if (Storage::disk('public')->exists($gallery->image_path)) {
-                Storage::disk('public')->delete($gallery->image_path);
+            if (Storage::disk('s3')->exists($gallery->image_path)) {
+                Storage::disk('s3')->delete($gallery->image_path);
             }
             
             // Simpan foto baru
-            $data['image_path'] = $request->file('image')->store('galleries', 'public');
+            $data['image_path'] = $request->file('image')->storePublicly('galleries', 's3');
         }
 
         $gallery->update($data);
@@ -86,8 +86,8 @@ class GalleryController extends Controller
     // Hapus
     public function destroy(Gallery $gallery)
     {
-        if (Storage::disk('public')->exists($gallery->image_path)) {
-            Storage::disk('public')->delete($gallery->image_path);
+        if (Storage::disk('s3')->exists($gallery->image_path)) {
+            Storage::disk('s3')->delete($gallery->image_path);
         }
 
         $gallery->delete();
