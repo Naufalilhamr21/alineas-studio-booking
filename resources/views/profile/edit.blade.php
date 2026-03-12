@@ -42,11 +42,13 @@
                     <div x-show="!editProfile" x-transition.opacity.duration.300ms class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 border-b border-gray-50 pb-4">
                             <div class="text-sm font-semibold text-gray-400">Nama Lengkap</div>
-                            <div class="md:col-span-2 text-sm lg:text-base font-bold text-gray-900">{{ $user->name }}</div>
+                            <div class="md:col-span-2 text-sm lg:text-base font-bold text-gray-900">{{ $user->name }}
+                            </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 border-b border-gray-50 pb-4">
                             <div class="text-sm font-semibold text-gray-400">Email</div>
-                            <div class="md:col-span-2 text-sm lg:text-base font-bold text-gray-900">{{ $user->email }}</div>
+                            <div class="md:col-span-2 text-sm lg:text-base font-bold text-gray-900">{{ $user->email }}
+                            </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 pb-2">
                             <div class="text-sm font-semibold text-gray-400">Nomor WhatsApp / HP</div>
@@ -72,7 +74,8 @@
                         @method('patch')
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="col-span-2">
+                            {{-- PERBAIKAN: Ubah col-span-2 menjadi md:col-span-2 agar tidak merusak grid di mobile --}}
+                            <div class="md:col-span-2">
                                 <label for="name" class="block text-sm font-bold text-gray-700 mb-2">Nama
                                     Lengkap</label>
                                 <input id="name" name="name" type="text"
@@ -140,7 +143,8 @@
                     <div x-show="!editPassword" x-transition.opacity.duration.300ms class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4 pb-2">
                             <div class="text-sm font-semibold text-gray-400">Password</div>
-                            <div class="md:col-span-2 text-sm lg:text-base font-bold text-gray-900 tracking-widest leading-none">
+                            <div
+                                class="md:col-span-2 text-sm lg:text-base font-bold text-gray-900 tracking-widest leading-none">
                                 ••••••••</div>
                         </div>
 
