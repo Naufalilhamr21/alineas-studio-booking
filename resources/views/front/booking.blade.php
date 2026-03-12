@@ -114,14 +114,14 @@
                     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 min-h-[450px] relative">
 
                         <div
-                            class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b border-gray-100 pb-4 gap-3 sm:gap-0">
+                            class="flex flex-col sm:flex-row justify-between sm:justify-center items-start sm:items-center mb-8 border-b border-gray-100 pb-4 gap-3 sm:gap-0">
                             <div>
                                 <h3 class="text-md lg:text-xl font-bold text-gray-800">Pilih Jam Foto</h3>
                                 <p class="text-sm text-gray-400 mt-1">Sesi foto 11:00 - 18:00 WIB</p>
                             </div>
                             <div x-show="formattedDate" class="w-full sm:w-auto text-left sm:text-right mt-1 sm:mt-0">
                                 <span x-text="formattedDate"
-                                    class="text-xs lg:text-sm font-bold text-red-600 bg-red-50 px-4 py-2 rounded-xl border border-red-100 inline-block"></span>
+                                    class="text-xs lg:text-sm font-bold text-red-600 bg-red-50 px-4 py-2 rounded-lg md:rounded-xl border border-red-100 inline-block"></span>
                             </div>
                         </div>
 
