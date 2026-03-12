@@ -152,7 +152,7 @@
                                             :disabled="!slot.is_available || (isLockedByOther(slot.time) && !selectedTimes
                                                 .includes(slot.time))"
                                             :class="{
-                                                'bg-red-600 text-white scale-105 shadow-md ring-2 ring-offset-2 ring-red-400': selectedTimes
+                                                'bg-red-600 text-white scale-105 shadow-md': selectedTimes
                                                     .includes(slot.time),
                                                 'bg-yellow-100 text-yellow-600 border-yellow-300 opacity-80 cursor-not-allowed': isLockedByOther(
                                                         slot.time) && !selectedTimes.includes(slot.time) && slot
