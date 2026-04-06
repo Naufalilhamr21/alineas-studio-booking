@@ -276,9 +276,9 @@
 
                                     {{-- FOTO --}}
                                     <td class="py-4 pl-2">
-                                        <div
+                                        <div    
                                             class="h-12 w-12 rounded-lg bg-gray-100 overflow-hidden shadow-sm border border-gray-200">
-                                            <img src="{{ asset('storage/' . $package->thumbnail) }}"
+                                            <img src="{{ Storage::disk('s3')->url($package->thumbnail) }}"
                                                 alt="{{ $package->name }}" class="h-full w-full object-cover">
                                         </div>
                                     </td>

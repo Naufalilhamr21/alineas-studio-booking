@@ -28,7 +28,7 @@
                         class="bg-gray-900 h-64 md:h-80 rounded-2xl p-4 flex flex-col justify-between hover:bg-gray-800 transition relative overflow-hidden border hover:border-red-600 hover:border-2">
 
                         @if ($package->thumbnail)
-                            <img src="{{ asset('storage/' . $package->thumbnail) }}"
+                            <img src="{{ Storage::disk('s3')->url($package->thumbnail) }}""
                                 class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 transition duration-500">
                         @endif
 
@@ -91,8 +91,8 @@
                     @php
                         $galleryImage = $package->galleries->first();
                         $imageSource = $galleryImage
-                            ? asset('storage/' . $galleryImage->image_path)
-                            : asset('storage/' . $package->thumbnail);
+                            ? Storage::disk('s3')->url($galleryImage->image_path)
+                            : Storage::disk('s3')->url($package->thumbnail);
                     @endphp
 
                     <a href="{{ route('gallery', ['package' => $package->id]) }}" class="group block w-full">

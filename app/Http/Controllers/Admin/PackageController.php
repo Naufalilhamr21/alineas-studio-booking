@@ -57,7 +57,7 @@ class PackageController extends Controller
         // B. Handle Upload Gambar
         if ($request->hasFile('thumbnail')) {
             // Simpan ke folder 'packages' di dalam storage public
-            $path = $request->file('thumbnail')->store('packages', 'public');
+            $path = $request->file('thumbnail')->storePublicly('packages', 's3');
             $validated['thumbnail'] = $path;
         }
 
@@ -117,12 +117,12 @@ class PackageController extends Controller
         // B. Handle Upload Gambar Baru (Jika Ada)
         if ($request->hasFile('thumbnail')) {
             // 1. Hapus gambar lama dulu agar server tidak penuh
-            if ($package->thumbnail && Storage::disk('public')->exists($package->thumbnail)) {
-                Storage::disk('public')->delete($package->thumbnail);
+            if ($package->thumbnail && Storage::disk('s3')->exists($package->thumbnail)) {
+                Storage::disk('s3')->delete($package->thumbnail);
             }
             
             // 2. Simpan gambar baru
-            $path = $request->file('thumbnail')->store('packages', 'public');
+            $path = $request->file('thumbnail')->storePublicly('packages', 's3');
             $validated['thumbnail'] = $path;
         }
 
@@ -155,8 +155,8 @@ class PackageController extends Controller
     public function destroy(package $package)
     {
         // 1. Hapus Gambar dari Storage (Jika ada)
-        if ($package->thumbnail && Storage::disk('public')->exists($package->thumbnail)) {
-            Storage::disk('public')->delete($package->thumbnail);
+        if ($package->thumbnail && Storage::disk('s3')->exists($package->thumbnail)) {
+            Storage::disk('s3')->delete($package->thumbnail);
         }
 
         // 2. Hapus Data dari Database
