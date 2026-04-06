@@ -16,6 +16,8 @@ class Package extends Model
         'thumbnail',
         'benefit',
         'price',
+        'max_pax',
+        'extra_price_per_pax',
         'duration_minutes',
         'is_active',
     ];
@@ -23,6 +25,8 @@ class Package extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'price' => 'decimal:2',
+        'max_pax' => 'integer',
+        'extra_price_per_pax' => 'integer',
     ];
 
     // --- TAMBAHKAN RELASI INI ---

@@ -64,19 +64,25 @@ class BookingController extends Controller
             'package_id' => 'required|exists:packages,id',
             'date' => 'required|date',
             'time' => 'required',
+            'total_pax' => 'required|integer|min:1'
         ]);
 
         $package = Package::findOrFail($request->package_id);
         $user = Auth::user();
 
+        // LOGIKA PERHITUNGAN HARGA DINAMIS
+        $extraPax = max(0, $request->total_pax - $package->max_pax);
+        $extraFee = $extraPax * $package->extra_price_per_pax;
+        $totalPrice = $package->price + $extraFee;
+
         $dpAmount = 50000;
 
-        // (Opsional/Keamanan) Jika kebetulan harga paket di bawah 50rb, DP disamakan dengan harga paket
+        // Jika kebetulan harga paket di bawah 50rb, DP disamakan dengan harga paket
         if ($package->price < $dpAmount) {
             $dpAmount = $package->price;
         }
 
-        $remainingBalance = $package->price - $dpAmount;
+        $remainingBalance = $totalPrice - $dpAmount;
 
         $startTime = Carbon::createFromFormat('Y-m-d H:i', "{$request->date} {$request->time}", 'Asia/Jakarta');
         $endTime = $startTime->copy()->addMinutes($package->duration_minutes);
@@ -104,9 +110,10 @@ class BookingController extends Controller
             'booking_code' => 'ALN-' . strtoupper(Str::random(6)),
             'user_id' => $user->id,
             'package_id' => $package->id,
+            'total_pax' => $request->total_pax,
             'start_time' => $startUtc,
             'end_time' => $endUtc,
-            'total_price' => $package->price,
+            'total_price' => $totalPrice,
             'dp_amount' => $dpAmount,
             'remaining_balance' => $remainingBalance,
             'status' => 'unpaid',

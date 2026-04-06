@@ -3,18 +3,28 @@
 namespace App\Services;
 
 use App\Models\Booking;
-use App\Models\BookingLock;
+use App\Models\StudioSchedule; // Model Baru
 use Illuminate\Support\Carbon;
 
 class BookingService
 {
     protected $timezone = 'Asia/Jakarta';
-    protected $openHour = '11:00';
-    protected $closeHour = '18:00';
+    protected $openHour = '11:00'; // Jam Buka Default
+    protected $closeHour = '18:00'; // Jam Tutup Default
 
-    // Logika untuk API Check Slots
     public function getAvailableSlots($date, $packageId, $durationMinutes)
     {
+        // 1. Cek apakah ada jadwal khusus pada tanggal ini
+        $schedule = StudioSchedule::where('date', $date)->first();
+
+        if ($schedule && $schedule->is_closed) {
+            return []; // Jika ditandai tutup full, tidak ada slot
+        }
+
+        // 2. Tentukan jam buka & tutup (Gunakan jadwal khusus jika ada, jika tidak gunakan default)
+        $actualOpenHour = ($schedule && $schedule->open_time) ? Carbon::parse($schedule->open_time)->format('H:i') : $this->openHour;
+        $actualCloseHour = ($schedule && $schedule->close_time) ? Carbon::parse($schedule->close_time)->format('H:i') : $this->closeHour;
+
         $startQuery = Carbon::createFromFormat('Y-m-d', $date, $this->timezone)->subDay()->startOfDay()->setTimezone('UTC');
         $endQuery = Carbon::createFromFormat('Y-m-d', $date, $this->timezone)->addDay()->endOfDay()->setTimezone('UTC');
 
@@ -23,16 +33,9 @@ class BookingService
             ->where('end_time', '>', $startQuery)
             ->get();
 
-        $openTime = Carbon::createFromFormat('Y-m-d H:i', "$date {$this->openHour}", $this->timezone);
-        $closeTime = Carbon::createFromFormat('Y-m-d H:i', "$date {$this->closeHour}", $this->timezone);
+        $openTime = Carbon::createFromFormat('Y-m-d H:i', "$date {$actualOpenHour}", $this->timezone);
+        $closeTime = Carbon::createFromFormat('Y-m-d H:i', "$date {$actualCloseHour}", $this->timezone);
         $now = Carbon::now($this->timezone);
-
-        // // Ambil semua lock aktif untuk paket & tanggal ini dalam satu query
-        // $activeLocks = BookingLock::where('package_id', $packageId)
-        //     ->where('date', $date)
-        //     ->where('expires_at', '>', $now)
-        //     ->pluck('time')
-        //     ->toArray();
 
         $slots = [];
         $currentSlot = $openTime->copy();
@@ -44,7 +47,6 @@ class BookingService
             $isAvailable = true;
             $slotTimeString = $currentSlot->format('H:i');
 
-            // 1. Cek bentrok dengan booking asli
             foreach ($existingBookings as $booking) {
                 $bStart = Carbon::parse($booking->start_time)->setTimezone($this->timezone);
                 $bEnd = Carbon::parse($booking->end_time)->setTimezone($this->timezone);
@@ -55,15 +57,9 @@ class BookingService
                 }
             }
 
-            // 2. Cek jam lewat
             if ($openTime->isSameDay($now) && $currentSlot->lt($now)) {
                 $isAvailable = false;
             }
-
-            // // 3. Cek locks (menggunakan array yang sudah di-fetch, menghemat query database)
-            // if (in_array($slotTimeString, $activeLocks)) {
-            //     $isAvailable = false;
-            // }
 
             $slots[] = [
                 'time' => $slotTimeString,
@@ -76,7 +72,6 @@ class BookingService
         return $slots;
     }
 
-    // Logika untuk API Check Calendar
     public function getCalendarMonthStatus($year, $month, $durationMinutes)
     {
         $startOfMonth = Carbon::createFromDate($year, $month, 1, $this->timezone)->startOfDay();
@@ -85,11 +80,18 @@ class BookingService
         $startUtc = $startOfMonth->copy()->setTimezone('UTC');
         $endUtc = $endOfMonth->copy()->setTimezone('UTC');
 
+        // Ambil semua pengaturan jadwal khusus bulan ini dan jadikan array (Key: Y-m-d)
+        $customSchedules = StudioSchedule::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->get()
+            ->keyBy(function($item) {
+                return Carbon::parse($item->date)->format('Y-m-d');
+            });
+
         $bookings = Booking::where('status', 'paid') 
             ->whereBetween('start_time', [$startUtc, $endUtc])
             ->get();
 
-        // OPTIMASI PERFORMA: Kelompokkan booking berdasarkan tanggal (Mencegah N+1 loop process)
         $bookingsByDate = $bookings->groupBy(function ($b) {
             return Carbon::parse($b->start_time)->setTimezone($this->timezone)->format('Y-m-d');
         });
@@ -100,14 +102,28 @@ class BookingService
 
         while ($currentDate->lte($endOfMonth)) {
             $day = $currentDate->day;
-            $status = 'available';
             $currentDateString = $currentDate->format('Y-m-d');
 
-            // Ambil booking hanya untuk hari ini dengan cepat
-            $dayBookings = $bookingsByDate->get($currentDateString, collect());
+            // Cek apakah tanggal ini memiliki pengaturan jadwal khusus
+            $dailySchedule = $customSchedules->get($currentDateString);
 
-            $openTime = $currentDate->copy()->setTime(11, 0, 0);
-            $closeTime = $currentDate->copy()->setTime(18, 0, 0);
+            if ($dailySchedule && $dailySchedule->is_closed) {
+                $calendarData[$day] = 'full'; // Corek di kalender jika libur
+                $currentDate->addDay();
+                continue; 
+            }
+
+            // Tentukan jam operasional hari ini
+            $actualOpenHour = ($dailySchedule && $dailySchedule->open_time) ? Carbon::parse($dailySchedule->open_time)->format('H:i') : $this->openHour;
+            $actualCloseHour = ($dailySchedule && $dailySchedule->close_time) ? Carbon::parse($dailySchedule->close_time)->format('H:i') : $this->closeHour;
+
+            $openParts = explode(':', $actualOpenHour);
+            $closeParts = explode(':', $actualCloseHour);
+
+            $openTime = $currentDate->copy()->setTime($openParts[0], $openParts[1], 0);
+            $closeTime = $currentDate->copy()->setTime($closeParts[0], $closeParts[1], 0);
+
+            $dayBookings = $bookingsByDate->get($currentDateString, collect());
             
             $totalSlots = 0;
             $realBookedSlots = 0;
@@ -137,6 +153,7 @@ class BookingService
                 $slotCursor->addMinutes(30);
             }
 
+            $status = 'available';
             if ($currentDate->endOfDay()->lt($now)) {
                 $status = 'past';
             } elseif ($totalSlots > 0 && $realBookedSlots >= $totalSlots) {

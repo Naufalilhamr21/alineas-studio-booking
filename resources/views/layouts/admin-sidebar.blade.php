@@ -83,6 +83,21 @@
                         <span x-show="!sidebarCollapsed" class="ml-3 whitespace-nowrap">Galeri Foto</span>
                     </a>
 
+                    <a href="{{ route('admin.schedules.index') }}" title="Jadwal Tutup"
+                        class="relative group flex items-center text-sm font-semibold transition-all duration-200"
+                        :class="sidebarCollapsed
+                            ?
+                            'justify-center w-12 h-12 mx-auto rounded-2xl {{ request()->routeIs('admin.schedules.*') ? 'bg-red-600 text-white shadow-md' : 'text-gray-500 hover:bg-red-100 hover:text-red-600' }}' :
+                            'px-3 py-3 rounded-xl {{ request()->routeIs('admin.schedules.*') ? 'bg-red-600 text-white shadow-md shadow-red-200' : 'text-gray-500 hover:bg-red-50 hover:text-red-600' }}'">
+                        <svg class="w-5 h-5 flex-shrink-0 transition-colors {{ request()->routeIs('admin.schedules.*') ? 'text-white' : 'text-gray-400 group-hover:text-current' }}"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        <span x-show="!sidebarCollapsed" class="ml-3 whitespace-nowrap">Jadwal Khusus</span>
+                    </a>
+
                     <a href="{{ route('admin.transactions.index') }}" title="Transaksi"
                         class="relative group flex items-center text-sm font-semibold transition-all duration-200"
                         :class="sidebarCollapsed

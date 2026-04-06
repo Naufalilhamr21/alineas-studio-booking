@@ -10,12 +10,32 @@ use App\Events\BookingPaid; // Wajib untuk refresh kalender realtime
 
 class TransactionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil data booking dengan relasi user & package
-        // Urutkan dari yang terbaru
-        $bookings = Booking::with(['user', 'package'])->latest()->get();
+        // 1. Buat dasar query (mengambil relasi user dan package agar efisien)
+        $query = Booking::with(['user', 'package'])->latest();
 
+        // 2. Cek apakah ada parameter pencarian (search) dari input form admin
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            
+            $query->where(function($q) use ($search) {
+                // Cari berdasarkan Kode Booking (kasus tidak sensitif huruf besar/kecil)
+                $q->where('booking_code', 'like', '%' . $search . '%')
+                  // ATAU cari berdasarkan nama User yang berelasi
+                  ->orWhereHas('user', function($userQuery) use ($search) {
+                      $userQuery->where('name', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        // 3. Eksekusi query dengan pagination (10 data per halaman)
+        // Gunakan $bookings (bukan get()) agar fungsi pagination bekerja di Blade
+        $bookings = $query->paginate(10);
+
+        // Jika pencarian dilakukan tapi hasilnya kosong, kita bisa memberitahu admin
+        // (Ini akan ditangani di file Blade bagian @empty)
+        
         return view('admin.transactions.index', compact('bookings'));
     }
 
@@ -59,7 +79,7 @@ class TransactionController extends Controller
         return back()->with('success', 'Link Google Drive berhasil disimpan!');
     }
 
-    // --- FUNGSI RESCHEDULE PINDAH KE SINI ---
+    // --- FUNGSI RESCHEDULE ---
     public function reschedule(Request $request, $id)
     {
         // 1. Validasi input dari Admin (Tanggal & Jam Baru)

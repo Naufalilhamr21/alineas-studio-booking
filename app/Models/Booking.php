@@ -18,6 +18,7 @@ class Booking extends Model
         'total_price' => 'integer',
         'dp_amount' => 'integer',
         'remaining_balance' => 'integer',
+        'total_pax' => 'integer',
     ];
 
     public function user(): BelongsTo

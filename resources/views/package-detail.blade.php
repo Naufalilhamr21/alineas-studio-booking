@@ -22,7 +22,7 @@
                 <div class="w-full">
                     <div class="aspect-[4/3] w-full bg-gray-200 rounded-3xl overflow-hidden shadow-sm relative group">
                         @if ($package->thumbnail)
-                            <img src="{{ Storage::disk('s3')->url($package->thumbnail) }}" alt="{{ $package->name }}"
+                            <img src="{{ asset('storage/' . $package->thumbnail) }}" alt="{{ $package->name }}"
                                 class="w-full h-full object-cover">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-gray-400">

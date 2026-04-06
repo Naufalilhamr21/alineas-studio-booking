@@ -39,6 +39,8 @@ class PackageController extends Controller
             'tagline' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
             'duration_minutes' => 'required|integer|min:1',
+            'max_pax' => 'required|integer|min:1',
+            'extra_price_per_pax' => 'required|numeric|min:0',
             'benefit' => 'nullable|string',
             'thumbnail' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Wajib ada gambar, max 2MB
             'is_active' => 'boolean', // Opsional, default false jika tidak dicentang
@@ -55,7 +57,7 @@ class PackageController extends Controller
         // B. Handle Upload Gambar
         if ($request->hasFile('thumbnail')) {
             // Simpan ke folder 'packages' di dalam storage public
-            $path = $request->file('thumbnail')->storePublicly('packages', 's3');
+            $path = $request->file('thumbnail')->store('packages', 'public');
             $validated['thumbnail'] = $path;
         }
 
@@ -101,6 +103,8 @@ class PackageController extends Controller
             'tagline' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
             'duration_minutes' => 'required|integer|min:1',
+            'max_pax' => 'required|integer|min:1',
+            'extra_price_per_pax' => 'required|numeric|min:0',
             'benefit' => 'nullable|string',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Boleh kosong (nullable) jika tidak ganti foto
             'is_active' => 'boolean',
@@ -113,12 +117,12 @@ class PackageController extends Controller
         // B. Handle Upload Gambar Baru (Jika Ada)
         if ($request->hasFile('thumbnail')) {
             // 1. Hapus gambar lama dulu agar server tidak penuh
-            if ($package->thumbnail && Storage::disk('s3')->exists($package->thumbnail)) {
-                Storage::disk('s3')->delete($package->thumbnail);
+            if ($package->thumbnail && Storage::disk('public')->exists($package->thumbnail)) {
+                Storage::disk('public')->delete($package->thumbnail);
             }
             
             // 2. Simpan gambar baru
-            $path = $request->file('thumbnail')->storePublicly('packages', 's3');
+            $path = $request->file('thumbnail')->store('packages', 'public');
             $validated['thumbnail'] = $path;
         }
 
@@ -151,8 +155,8 @@ class PackageController extends Controller
     public function destroy(package $package)
     {
         // 1. Hapus Gambar dari Storage (Jika ada)
-        if ($package->thumbnail && Storage::disk('s3')->exists($package->thumbnail)) {
-            Storage::disk('s3')->delete($package->thumbnail);
+        if ($package->thumbnail && Storage::disk('public')->exists($package->thumbnail)) {
+            Storage::disk('public')->delete($package->thumbnail);
         }
 
         // 2. Hapus Data dari Database

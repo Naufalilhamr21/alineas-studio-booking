@@ -8,10 +8,11 @@ use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Front\BookingController;
 use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\ScheduleController;
 
 /*
 |--------------------------------------------------------------------------
-| 1. ROUTE PUBLIC (Bisa diakses tanpa login)
+| ROUTE PUBLIC (Bisa diakses tanpa login)
 |--------------------------------------------------------------------------
 */
 Route::get('/', [LandingController::class, 'index'])->name('home');
@@ -21,7 +22,7 @@ Route::get('/gallery', [LandingController::class, 'gallery'])->name('gallery');
 
 /*
 |--------------------------------------------------------------------------
-| 2. ROUTE AUTH (Harus Login: Customer & Admin)
+| ROUTE AUTH (Harus Login: Customer & Admin)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -39,11 +40,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | 3. ROUTE BOOKING FLOW (Customer)
+    | ROUTE BOOKING FLOW (Customer)
     |--------------------------------------------------------------------------
     */
     // Halaman Form Booking (Kalender)
-    // PERBAIKAN: Nama route disesuaikan dengan view package-detail ('front.booking')
+    // Nama route disesuaikan dengan view package-detail ('front.booking')
     Route::get('/booking/{package:slug}', [BookingController::class, 'show'])->name('front.booking'); 
     
     // Simpan Booking
@@ -63,7 +64,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | 4. ROUTE ADMIN (Hanya Role Admin)
+    | ROUTE ADMIN (Hanya Role Admin)
     |--------------------------------------------------------------------------
     */
     Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -74,6 +75,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // CRUD: Packages & Galleries
         Route::resource('packages', PackageController::class);
         Route::resource('galleries', GalleryController::class);
+
+        // CRUD Jadwal Operasional / Hari Libur
+        Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+        Route::post('/schedules', [ScheduleController::class, 'store'])->name('schedules.store');
+        Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy'])->name('schedules.destroy');
         
         // Transaksi
         Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
