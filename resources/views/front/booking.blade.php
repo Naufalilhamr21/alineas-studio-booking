@@ -175,7 +175,7 @@
                                         class="w-2 h-2 rounded-full border border-red-600"></span> Hari Ini</div>
                                 <div class="flex items-center gap-1"><span
                                         class="w-2 h-2 rounded-full bg-yellow-400"></span> Terisi Sebagian</div>
-                                <div class="flex items-center gap-1"><span
+                                <div class="flex items-center gap-1 p-2 bg-gray-200 rounded-md"><span
                                         class="text-gray-300 line-through">1</span>
                                     Penuh/Tutup</div>
                             </div>
