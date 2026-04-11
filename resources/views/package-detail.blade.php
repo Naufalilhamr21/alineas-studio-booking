@@ -38,6 +38,11 @@
                 </div>
 
                 <div class="space-y-6">
+                    <h1>
+                        <span class="text-gray-500 text-sm lg:text-base">Harga Mulai Dari</span><br>
+                        <span class="text-red-700 text-2xl lg:text-3xl font-bold">Rp
+                            {{ number_format($package->price, 0, ',', '.') }}</span>
+                    </h1>
 
                     <div>
                         <h3 class="font-bold text-gray-900 text-base mb-3">Benefit</h3>
