@@ -39,11 +39,12 @@
 
                 <div class="space-y-6">
                     <h1>
-                        <span class="text-red-700 text-2xl lg:text-3xl font-bold leading-tight">Rp{{ number_format($package->price, 0, ',', '.') }}</span>
+                        <span
+                            class="text-red-700 text-2xl lg:text-3xl font-bold leading-tight">Rp{{ number_format($package->price, 0, ',', '.') }}</span>
                     </h1>
 
                     <div>
-                        <h3 class="font-bold text-gray-900 text-base mb-3">Benefit</h3>
+                        <h3 class="font-bold text-gray-900 text-base mb-3">Deskripsi</h3>
                         <ul class="list-disc pl-5 text-sm text-gray-600 leading-relaxed space-y-2">
                             @foreach (explode("\n", $package->benefit) as $item)
                                 @if (trim($item))
