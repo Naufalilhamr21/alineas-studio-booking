@@ -4,12 +4,13 @@
     <div class="bg-white min-h-screen pt-6 lg:pt-8 pb-16 relative">
         <div class="max-w-7xl mx-4 lg:mx-8 px-4 sm:px-6 lg:px-8 mt-2">
             <div class="flex justify-between items-start mb-8">
-                <div>
-                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">{{ $package->name }}</h1>
-                    <p class="text-gray-500 text-sm lg:text-base mt-1">
-                        {{ $package->tagline ?? 'Paket Foto Special Untukmu' }}
-                    </p>
-                </div>
+                <a href="{{ route('pricelist') }}"
+                    class="bg-gray-700 text-white w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-700 transition">
+                    <svg class="w-6 h-6 text-white-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
+                    </svg>
+                </a>
 
                 <a href="{{ route('front.booking', $package->slug) }}"
                     class="hidden lg:flex text-center bg-red-700 text-white items-center my-1 px-6 py-2 text-sm lg:text-base rounded-full font-bold hover:bg-red-800 transition">
@@ -30,6 +31,15 @@
                             </div>
                         @endif
 
+                        {{-- @if ($package->thumbnail)
+                            <img src="{{ asset('storage/' . $package->thumbnail) }}" alt="{{ $package->name }}"
+                                class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                No Image
+                            </div>
+                        @endif --}}
+
                         <a href="{{ route('gallery', ['package' => $package->id]) }}"
                             class="inline-flex absolute bottom-4 left-4 bg-gray-100 hover:bg-gray-200 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-gray-900">
                             {{ $package->name }} Gallery
@@ -37,14 +47,21 @@
                     </div>
                 </div>
 
-                <div class="space-y-6">
+                <div class="space-y-4">
+                    <div>
+                        <h1 class="text-xl lg:text-2xl font-bold text-gray-900 leading-tight">{{ $package->name }}</h1>
+                        <p class="text-gray-500 text-sm mt-1">
+                            {{ $package->tagline ?? 'Paket Foto Special Untukmu' }}
+                        </p>
+                    </div>
+
                     <h1>
                         <span
-                            class="text-red-700 text-2xl lg:text-3xl font-bold leading-tight">Rp{{ number_format($package->price, 0, ',', '.') }}</span>
+                            class="text-red-700 text-2xl lg:text-3xl font-bold tracking-tight"><span class="text-sm">Rp</span>{{ number_format($package->price, 0, ',', '.') }}</span>
                     </h1>
 
                     <div>
-                        <h3 class="font-bold text-gray-900 text-base mb-3">Deskripsi</h3>
+                        <h3 class="font-bold text-gray-900 text-base mb-1">Deskripsi</h3>
                         <ul class="list-disc pl-5 text-sm text-gray-600 leading-relaxed space-y-2">
                             @foreach (explode("\n", $package->benefit) as $item)
                                 @if (trim($item))
@@ -55,7 +72,7 @@
                     </div>
 
                     <div>
-                        <h3 class="font-bold text-gray-900 text-base mb-3">Syarat dan Ketentuan</h3>
+                        <h3 class="font-bold text-gray-900 text-base mb-1">Syarat dan Ketentuan</h3>
                         <ul class="list-disc pl-5 text-sm text-gray-600 leading-relaxed space-y-2">
                             <li>Booking sesi yang sudah masuk sistem tidak bisa refund/cancel.</li>
                             <li>Reschedule dapat dilakukan selambat-lambatnya 3 jam sebelum sesi dan mendapat konfirmasi

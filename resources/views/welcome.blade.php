@@ -32,6 +32,11 @@
                                 class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 transition duration-500">
                         @endif
 
+                        {{-- @if ($package->thumbnail)
+                            <img src="{{ asset('storage/' . $package->thumbnail) }}"
+                                class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 transition duration-500">
+                        @endif --}}
+
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-90">
                         </div>
@@ -94,6 +99,13 @@
                             ? Storage::disk('s3')->url($galleryImage->image_path)
                             : Storage::disk('s3')->url($package->thumbnail);
                     @endphp
+
+                    {{-- @php
+                        $galleryImage = $package->galleries->first();
+                        $imageSource = $galleryImage
+                            ? asset('storage/' . $galleryImage->image_path)
+                            : asset('storage/' . $package->thumbnail);
+                    @endphp  --}}
 
                     <a href="{{ route('gallery', ['package' => $package->id]) }}" class="group block w-full">
                         <div class="w-full h-64 md:h-80 rounded-xl overflow-hidden relative shadow-md">

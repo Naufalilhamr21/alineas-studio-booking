@@ -31,6 +31,11 @@
                                 class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 transition duration-500">
                         @endif
 
+                        {{-- @if ($package->thumbnail)
+                            <img src="{{ asset('storage/' . $package->thumbnail) }}"
+                                class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 transition duration-500">
+                        @endif --}}
+
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-90">
                         </div>
