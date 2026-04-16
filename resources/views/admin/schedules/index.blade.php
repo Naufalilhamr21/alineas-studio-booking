@@ -123,7 +123,7 @@
                             <div>
                                 <label for="open_time" class="block text-xs font-bold text-gray-700 mb-1">Jam Buka <span
                                         class="text-red-500">*</span></label>
-                                <input type="time" name="open_time" id="open_time" x-model="openTime"
+                                <input type="time" name="open_time" id="open_time" x-model="openTime" step="1800"
                                     class="w-full px-3 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100 text-sm"
                                     :class="showErrors && !openTime ? 'border-red-400 focus:border-red-400' :
                                         'border-gray-200 focus:border-blue-400'">
@@ -133,7 +133,7 @@
                             <div>
                                 <label for="close_time" class="block text-xs font-bold text-gray-700 mb-1">Jam Tutup
                                     <span class="text-red-500">*</span></label>
-                                <input type="time" name="close_time" id="close_time" x-model="closeTime"
+                                <input type="time" name="close_time" id="close_time" x-model="closeTime" step="1800"
                                     class="w-full px-3 py-2 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-100 text-sm"
                                     :class="showErrors && !closeTime ? 'border-red-400 focus:border-red-400' :
                                         'border-gray-200 focus:border-blue-400'">
