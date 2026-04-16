@@ -8,18 +8,20 @@
         slots: [],
         selectedTime: '',
     
-        openRescheduleModal(url) {
+        openRescheduleModal(url, bookingId) {
             this.rescheduleUrl = url;
+            this.bookingId = bookingId;
             this.isRescheduleModalOpen = true;
-            this.slots = [];
+    
             this.selectedDate = '';
             this.selectedTime = '';
+            this.slots = [];
         },
     
-        async fetchSlots(bookingId) {
-            if (!this.selectedDate) return;
+        async fetchSlots() {
+            if (!this.selectedDate || !this.bookingId) return;
     
-            let response = await fetch(`/admin/reschedule-slots/${bookingId}?date=${this.selectedDate}`);
+            let response = await fetch(`/admin/reschedule-slots/${this.bookingId}?date=${this.selectedDate}`);
             let data = await response.json();
     
             this.slots = data;
@@ -332,7 +334,7 @@
 
                                                     {{-- Tombol Reschedule HANYA muncul jika belum lunas --}}
                                                     <button
-                                                        @click="openRescheduleModal('{{ route('admin.bookings.reschedule', $booking->id) }}')"
+                                                        @click="openRescheduleModal('{{ route('admin.bookings.reschedule', $booking->id) }}', {{ $booking->id }})"
                                                         type="button"
                                                         class="bg-purple-600 text-white px-3 py-2 rounded-lg hover:bg-purple-700 transition shadow-sm text-xs font-bold flex items-center gap-1.5"
                                                         title="Reschedule Jadwal">
@@ -460,7 +462,7 @@
                                     <label class="block text-sm font-semibold text-gray-700 mb-1">Pilih Tanggal
                                         Baru</label>
                                     <input type="date" name="date" x-model="selectedDate"
-                                        @change="fetchSlots({{ $booking->id }})" min="{{ date('Y-m-d') }}" required
+                                        @change="fetchSlots()" min="{{ date('Y-m-d') }}" required
                                         class="w-full border-gray-300 rounded-lg">
                                 </div>
                                 <div>
