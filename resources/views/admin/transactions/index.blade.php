@@ -483,18 +483,24 @@
                         <h3 class="text-lg font-bold text-gray-900" x-text="modalTitle"></h3>
                         <p class="mt-2 text-sm text-gray-500" x-text="modalMessage"></p>
                     </div>
-                    <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-between gap-3">
-                        <form :action="actionUrl" method="POST" class="w-full">
+                    <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+                        {{-- Tombol Batal --}}
+                        <button @click="isModalOpen = false" type="button"
+                            class="w-full sm:w-auto inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 transition">
+                            Batal
+                        </button>
+
+                        {{-- Form dan Tombol Aksi --}}
+                        <form :action="actionUrl" method="POST" class="w-full sm:w-auto">
                             @csrf
                             <template x-if="actionMethod === 'DELETE'">
                                 <input type="hidden" name="_method" value="DELETE">
                             </template>
                             <button type="submit" :class="confirmColor"
-                                class="w-full inline-flex justify-center rounded-lg shadow-sm px-4 py-2 font-xs text-white transition"
-                                x-text="confirmText"></button>
+                                class="w-full sm:w-auto inline-flex justify-center rounded-lg shadow-sm px-4 py-2 text-sm font-semibold text-white transition"
+                                x-text="confirmText">
+                            </button>
                         </form>
-                        <button @click="isModalOpen = false" type="button"
-                            class="w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white font-xs text-gray-700 hover:bg-gray-50 transition">Batal</button>
                     </div>
                 </div>
             </div>
