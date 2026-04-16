@@ -310,32 +310,55 @@
                                         <div>
                                             <p
                                                 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
-                                                Link Google Drive Hasil Foto</p>
-                                            <form action="{{ route('admin.transactions.drive', $booking->id) }}"
-                                                method="POST" class="flex gap-2">
-                                                @csrf
-                                                <input type="url" name="google_drive_link"
-                                                    value="{{ $booking->google_drive_link }}"
-                                                    placeholder="https://drive.google.com/..."
-                                                    class="w-full text-xs border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2"
-                                                    required>
-                                                <button type="submit"
-                                                    class="bg-gray-800 text-white px-3 py-2 rounded-lg hover:bg-gray-700 transition shadow-sm text-xs font-bold"
-                                                    title="Simpan Link">
-                                                    Simpan
-                                                </button>
-                                            </form>
-                                            @if ($booking->google_drive_link)
-                                                <div class="mt-2">
-                                                    <a href="{{ $booking->google_drive_link }}" target="_blank"
-                                                        class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-md transition-colors w-max">
-                                                        <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path
-                                                                d="M20.1 10.3h-8v3.4h4.6c-.2 1.5-1.1 2.8-2.4 3.6l3.8 3c2.2-2.1 3.5-5.2 3.5-8.8 0-.6-.1-1.2-.2-1.8zM12 21c2.5 0 4.6-.8 6.1-2.2l-3.8-3c-.8.5-1.8.8-2.3.8-2.6 0-4.8-1.7-5.5-4h-3.9v3.1C4.1 18.9 7.7 21 12 21zm-5.5-8c-.2-.6-.2-1.2-.2-1.8 0-.6.1-1.2.2-1.8V6.3H2.6C1.8 7.8 1.4 9.4 1.4 11c0 1.6.4 3.2 1.2 4.7l3.9-3zM12 3c1.3 0 2.5.5 3.5 1.3l2.6-2.6C16.6.6 14.5 0 12 0 7.7 0 4.1 2.1 2.6 5.3l3.9 3c.7-2.3 2.9-4 5.5-4z" />
-                                                        </svg>
-                                                        Buka Folder Drive
-                                                    </a>
+                                                Link Google Drive Hasil Foto
+                                            </p>
+
+                                            {{-- Cek Jika Sudah Lunas --}}
+                                            @if ($booking->status == 'paid' && $booking->remaining_balance == 0)
+                                                <form action="{{ route('admin.transactions.drive', $booking->id) }}"
+                                                    method="POST" class="flex gap-2">
+                                                    @csrf
+                                                    <input type="url" name="google_drive_link"
+                                                        value="{{ $booking->google_drive_link }}"
+                                                        placeholder="https://drive.google.com/..."
+                                                        class="w-full text-xs border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 px-3 py-2"
+                                                        required>
+                                                    <button type="submit"
+                                                        class="bg-gray-800 text-white px-3 py-2 rounded-lg hover:bg-gray-700 transition shadow-sm text-xs font-bold"
+                                                        title="Simpan Link">
+                                                        Simpan
+                                                    </button>
+                                                </form>
+
+                                                @if ($booking->google_drive_link)
+                                                    <div class="mt-2">
+                                                        <a href="{{ $booking->google_drive_link }}" target="_blank"
+                                                            class="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-md transition-colors w-max">
+                                                            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="currentColor"
+                                                                viewBox="0 0 24 24">
+                                                                <path
+                                                                    d="M20.1 10.3h-8v3.4h4.6c-.2 1.5-1.1 2.8-2.4 3.6l3.8 3c2.2-2.1 3.5-5.2 3.5-8.8 0-.6-.1-1.2-.2-1.8zM12 21c2.5 0 4.6-.8 6.1-2.2l-3.8-3c-.8.5-1.8.8-2.3.8-2.6 0-4.8-1.7-5.5-4h-3.9v3.1C4.1 18.9 7.7 21 12 21zm-5.5-8c-.2-.6-.2-1.2-.2-1.8 0-.6.1-1.2.2-1.8V6.3H2.6C1.8 7.8 1.4 9.4 1.4 11c0 1.6.4 3.2 1.2 4.7l3.9-3zM12 3c1.3 0 2.5.5 3.5 1.3l2.6-2.6C16.6.6 14.5 0 12 0 7.7 0 4.1 2.1 2.6 5.3l3.9 3c.7-2.3 2.9-4 5.5-4z" />
+                                                            </svg>
+                                                            Buka Folder Drive
+                                                        </a>
+                                                    </div>
+                                                @endif
+
+                                                {{-- Jika Belum Lunas (Belum DP atau Sudah DP tapi masih ada sisa) --}}
+                                            @else
+                                                <div
+                                                    class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 flex items-start gap-2">
+                                                    <svg class="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0"
+                                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                                        </path>
+                                                    </svg>
+                                                    <p class="text-xs text-gray-500">
+                                                        Form input link hasil foto akan terbuka setelah status
+                                                        pembayaran <span class="font-bold text-gray-700">Lunas</span>.
+                                                    </p>
                                                 </div>
                                             @endif
                                         </div>
@@ -467,11 +490,11 @@
                                 <input type="hidden" name="_method" value="DELETE">
                             </template>
                             <button type="submit" :class="confirmColor"
-                                class="w-full inline-flex justify-center rounded-lg shadow-sm px-4 py-2 font-medium text-white transition"
+                                class="w-full inline-flex justify-center rounded-lg shadow-sm px-4 py-2 font-xs text-white transition"
                                 x-text="confirmText"></button>
                         </form>
                         <button @click="isModalOpen = false" type="button"
-                            class="w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white font-medium text-gray-700 hover:bg-gray-50 transition">Batal</button>
+                            class="w-full inline-flex justify-center rounded-lg border border-gray-300 shadow-sm px-4 py-2 bg-white font-xs text-gray-700 hover:bg-gray-50 transition">Batal</button>
                     </div>
                 </div>
             </div>
