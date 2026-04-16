@@ -72,12 +72,6 @@
                 </div>
             @endif
         </div>
-
-        @if ($packages->isEmpty())
-            <div class="col-span-2 md:col-span-4 text-center text-gray-400 py-10">
-                Belum ada paket tersedia.
-            </div>
-        @endif
     </section>
 
     <section id="gallery" class="w-full bg-red-700 py-10 mb-12">

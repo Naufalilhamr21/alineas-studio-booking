@@ -10,7 +10,7 @@ class LandingController extends Controller
     public function index()
     {
         // Ambil 4 paket pertama untuk ditampilkan di halaman depan
-        $packages = Package::with(['galleries' => function($query) {
+        $packages = Package::where('is_active', true)->with(['galleries' => function($query) {
             $query->latest();
         }])->take(4)->get();
 
