@@ -188,8 +188,6 @@
                                         </svg>
                                     </div>
                                     <p class="text-sm font-medium text-gray-900">Tidak ada jadwal foto mendatang.</p>
-                                    <p class="text-sm text-gray-500 mt-1">Belum ada pelanggan yang menyelesaikan
-                                        pembayaran DP.</p>
                                 </td>
                             </tr>
                         @endforelse

@@ -9,7 +9,9 @@
 
         <div class="max-w-7xl bg-white rounded-3xl shadow-sm py-10 border border-gray-200 mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center mb-8 gap-3">
-                <a href="{{ route('home') }}" class="group flex items-center">
+                <a href="{{ auth()->user()->role == 'admin' ? route('dashboard') : route('home') }}"
+                    class="group flex items-center">
+
                     <svg class="w-6 h-6 text-gray-700 group-hover:text-red-700 transition-colors duration-200"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
