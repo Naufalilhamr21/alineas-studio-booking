@@ -84,7 +84,7 @@ class TransactionController extends Controller
     {
         // 1. Validasi input dari Admin (Tanggal & Jam Baru)
         $request->validate([
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:today',
             'time' => 'required|date_format:H:i',
         ]);
 

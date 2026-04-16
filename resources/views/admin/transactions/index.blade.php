@@ -482,7 +482,7 @@
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-1">Pilih Tanggal
                                         Baru</label>
-                                    <input type="date" name="date" required
+                                    <input type="date" name="date" min="{{ date('Y-m-d') }}" required
                                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500">
                                 </div>
                                 <div>
