@@ -1,6 +1,7 @@
 <x-app-layout>
     <div x-data="{
-        ...
+        expandedRow: null, // <-- TAMBAHKAN BARIS INI
+    
         isRescheduleModalOpen: false,
         rescheduleUrl: '',
     
