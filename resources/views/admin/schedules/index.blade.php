@@ -153,7 +153,7 @@
 
                                     <option value="">Pilih Jam</option>
 
-                                    @for ($h = 11; $h <= 18; $h++)
+                                    @for ($h = 11; $h <= 21; $h++)
                                         <option value="{{ sprintf('%02d:00', $h) }}">{{ sprintf('%02d:00', $h) }}
                                         </option>
                                         <option value="{{ sprintf('%02d:30', $h) }}">{{ sprintf('%02d:30', $h) }}
