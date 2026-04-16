@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use App\Events\BookingPaid; // Wajib untuk refresh kalender realtime
+use App\Events\BookingPaid;
+use App\Models\StudioSchedule;
 
 class TransactionController extends Controller
 {
@@ -82,7 +83,6 @@ class TransactionController extends Controller
     // --- FUNGSI RESCHEDULE ---
     public function reschedule(Request $request, $id)
     {
-        // 1. Validasi input dari Admin (Tanggal & Jam Baru)
         $request->validate([
             'date' => 'required|date|after_or_equal:today',
             'time' => 'required|date_format:H:i',
@@ -90,50 +90,75 @@ class TransactionController extends Controller
 
         $booking = Booking::findOrFail($id);
         $package = $booking->package;
-        
+
+        // 🔥 CEK JADWAL STUDIO
+        $schedule = StudioSchedule::where('date', $request->date)->first();
+
+        if ($schedule && $schedule->is_closed) {
+            return back()->with('error', 'Studio tutup di tanggal ini.');
+        }
+
+        // default jam
+        $open = '11:00';
+        $close = '18:00';
+
+        // jika ada jam khusus
+        if ($schedule && !$schedule->is_closed) {
+            $open = Carbon::parse($schedule->open_time)->format('H:i');
+            $close = Carbon::parse($schedule->close_time)->format('H:i');
+        }
+
+        // 🔥 CEK JAM DI LUAR OPERASIONAL
+        if ($request->time < $open || $request->time >= $close) {
+            return back()->with('error', 'Jam di luar operasional studio.');
+        }
+
+        // buat datetime
         $startTime = Carbon::createFromFormat('Y-m-d H:i', "{$request->date} {$request->time}", 'Asia/Jakarta');
         $endTime = $startTime->copy()->addMinutes($package->duration_minutes);
-        
+
+        // 🔥 CEK JANGAN LEWAT JAM TUTUP
+        if ($endTime->format('H:i') > $close) {
+            return back()->with('error', 'Jam selesai melebihi jam operasional.');
+        }
+
         $startUtc = $startTime->copy()->setTimezone('UTC');
         $endUtc = $endTime->copy()->setTimezone('UTC');
 
-        // 2. Cek Bentrok (Kecualikan ID jadwal lama milik pelanggan ini sendiri)
+        // 🔥 CEK BENTROK (SUDAH BAGUS PUNYA KAMU)
         $conflict = Booking::where('id', '!=', $booking->id)
             ->where(function($query) {
                 $query->where('status', 'paid')
-                      ->orWhere(function($q) {
-                          $q->where('status', 'unpaid')
+                    ->orWhere(function($q) {
+                        $q->where('status', 'unpaid')
                             ->where('created_at', '>=', now()->subMinutes(15));
-                      });
+                    });
             })
             ->where('start_time', '<', $endUtc)
             ->where('end_time', '>', $startUtc)
             ->exists();
 
         if ($conflict) {
-            // Jika Admin milih jam yang ternyata sudah ada isinya
-            return back()->with('error', 'Gagal Reschedule: Jadwal baru bentrok dengan pelanggan lain.');
+            return back()->with('error', 'Jadwal bentrok dengan booking lain.');
         }
 
-        // 3. Simpan tanggal lama sebelum ditimpa (untuk refresh kalender publik)
+        // simpan tanggal lama
         $oldDateWib = Carbon::parse($booking->start_time)->setTimezone('Asia/Jakarta')->format('Y-m-d');
-        
-        // 4. Update data di database
+
+        // update
         $booking->update([
             'start_time' => $startUtc,
             'end_time' => $endUtc,
         ]);
 
-        // 5. Beritahu Publik via Pusher (Magic!)
-        // Refresh tanggal lama agar kembali KOSONG
+        // broadcast (punya kamu sudah bagus 🔥)
         broadcast(new BookingPaid($oldDateWib));
-        
-        // Refresh tanggal baru agar langsung TERKUNCI
+
         $newDateWib = $startTime->format('Y-m-d');
         if ($oldDateWib !== $newDateWib) {
             broadcast(new BookingPaid($newDateWib));
         }
 
-        return back()->with('success', 'Jadwal pelanggan berhasil dipindahkan!');
+        return back()->with('success', 'Reschedule berhasil.');
     }
 }

@@ -485,14 +485,19 @@
                                     <input type="date" name="date" min="{{ date('Y-m-d') }}" required
                                         class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500">
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-1">Pilih Jam
-                                        Baru</label>
-                                    <input type="time" name="time" required
-                                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500">
-                                    <span class="text-xs text-gray-500 mt-1 block">*Sistem otomatis akan mengecek jika
-                                        jam ini bertabrakan.</span>
-                                </div>
+                                <select name="time" required
+                                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500">
+
+                                    <option value="">Pilih Jam</option>
+
+                                    @for ($h = 11; $h < 18; $h++)
+                                        <option value="{{ sprintf('%02d:00', $h) }}">{{ sprintf('%02d:00', $h) }}
+                                        </option>
+                                        <option value="{{ sprintf('%02d:30', $h) }}">{{ sprintf('%02d:30', $h) }}
+                                        </option>
+                                    @endfor
+
+                                </select>
                             </div>
                         </div>
                         <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
