@@ -1,51 +1,28 @@
 <x-app-layout>
     <div x-data="{
-        expandedRow: null, // State untuk melacak baris mana yang sedang terbuka
-        isModalOpen: false,
-        actionUrl: '',
-        actionMethod: 'POST',
-        modalTitle: '',
-        modalMessage: '',
-        confirmText: '',
-        confirmColor: '',
-        iconColor: '',
-    
-        // --- VARIABEL UNTUK MODAL RESCHEDULE ---
+        ...
         isRescheduleModalOpen: false,
         rescheduleUrl: '',
     
-        openModal(type, url) {
-            this.actionUrl = url;
-            this.isModalOpen = true;
+        selectedDate: '',
+        slots: [],
+        selectedTime: '',
     
-            if (type === 'delete') {
-                this.actionMethod = 'DELETE';
-                this.modalTitle = 'Hapus Transaksi?';
-                this.modalMessage = 'Data yang dihapus tidak bisa dikembalikan.';
-                this.confirmText = 'Ya, Hapus';
-                this.confirmColor = 'bg-red-600 hover:bg-red-700';
-                this.iconColor = 'text-red-600 bg-red-100';
-            } else if (type === 'approve') {
-                this.actionMethod = 'POST';
-                this.modalTitle = 'Konfirmasi DP Manual';
-                this.modalMessage = 'Setujui pembayaran DP ini secara manual?';
-                this.confirmText = 'Ya, Setujui';
-                this.confirmColor = 'bg-yellow-500 hover:bg-yellow-600';
-                this.iconColor = 'text-yellow-600 bg-yellow-100';
-            } else if (type === 'complete') {
-                this.actionMethod = 'POST';
-                this.modalTitle = 'Konfirmasi Pelunasan';
-                this.modalMessage = 'Konfirmasi bahwa pelanggan sudah melunasi sisa tagihan di studio?';
-                this.confirmText = 'Ya, Lunas';
-                this.confirmColor = 'bg-blue-600 hover:bg-blue-700';
-                this.iconColor = 'text-blue-600 bg-blue-100';
-            }
-        },
-    
-        // --- FUNGSI BUKA MODAL RESCHEDULE ---
         openRescheduleModal(url) {
             this.rescheduleUrl = url;
             this.isRescheduleModalOpen = true;
+            this.slots = [];
+            this.selectedDate = '';
+            this.selectedTime = '';
+        },
+    
+        async fetchSlots(bookingId) {
+            if (!this.selectedDate) return;
+    
+            let response = await fetch(`/admin/reschedule-slots/${bookingId}?date=${this.selectedDate}`);
+            let data = await response.json();
+    
+            this.slots = data;
         }
     }">
 
@@ -482,22 +459,32 @@
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 mb-1">Pilih Tanggal
                                         Baru</label>
-                                    <input type="date" name="date" min="{{ date('Y-m-d') }}" required
-                                        class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500">
+                                    <input type="date" name="date" x-model="selectedDate"
+                                        @change="fetchSlots({{ $booking->id }})" min="{{ date('Y-m-d') }}" required
+                                        class="w-full border-gray-300 rounded-lg">
                                 </div>
-                                <select name="time" required
-                                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                                        Pilih Jam Baru
+                                    </label>
 
-                                    <option value="">Pilih Jam</option>
+                                    <select name="time" x-model="selectedTime" required
+                                        class="w-full border-gray-300 rounded-lg shadow-sm">
 
-                                    @for ($h = 11; $h < 18; $h++)
-                                        <option value="{{ sprintf('%02d:00', $h) }}">{{ sprintf('%02d:00', $h) }}
-                                        </option>
-                                        <option value="{{ sprintf('%02d:30', $h) }}">{{ sprintf('%02d:30', $h) }}
-                                        </option>
-                                    @endfor
+                                        <option value="">Pilih Jam</option>
 
-                                </select>
+                                        <template x-for="slot in slots" :key="slot.time">
+                                            <option :value="slot.time" :disabled="!slot.is_available"
+                                                x-text="slot.is_available ? slot.time : slot.time + ' (Full)'">
+                                            </option>
+                                        </template>
+
+                                    </select>
+
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        *Slot otomatis menyesuaikan jadwal studio & booking
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row sm:justify-end gap-3">

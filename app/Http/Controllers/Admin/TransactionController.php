@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Events\BookingPaid;
 use App\Models\StudioSchedule;
+use App\Services\BookingService;
 
 class TransactionController extends Controller
 {
@@ -160,5 +161,21 @@ class TransactionController extends Controller
         }
 
         return back()->with('success', 'Reschedule berhasil.');
+    }
+
+    public function getRescheduleSlots(Request $request, Booking $booking, BookingService $bookingService)
+    {
+        $date = $request->date;
+
+        if (!$date) return response()->json([]);
+
+        // ambil slot dari service (INI YANG KEREN 🔥)
+        $slots = $bookingService->getAvailableSlots(
+            $date,
+            $booking->package_id,
+            $booking->package->duration_minutes
+        );
+
+        return response()->json($slots);
     }
 }
