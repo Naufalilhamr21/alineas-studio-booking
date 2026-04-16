@@ -89,7 +89,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/transactions/{transaction}/drive', [TransactionController::class, 'updateDrive'])->name('transactions.drive');
 
         // Reschedule
-        Route::get('/admin/reschedule-slots/{booking}', [TransactionController::class, 'getRescheduleSlots'])->name('admin.reschedule.slots');
+        Route::get('/reschedule-slots/{booking}', [TransactionController::class, 'getRescheduleSlots'])->name('admin.reschedule.slots');
         Route::post('/bookings/{booking}/reschedule', [TransactionController::class, 'reschedule'])->name('bookings.reschedule');
     });
 

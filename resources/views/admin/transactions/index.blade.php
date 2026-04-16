@@ -1,56 +1,75 @@
 <x-app-layout>
     <div x-data="{
-        // ... variabel sebelumnya ...
+        // State dari kode sebelumnya
         expandedRow: null,
-        bookingId: null, // 1. DEKLARASIKAN DISINI
+        bookingId: null,
     
         isRescheduleModalOpen: false,
         rescheduleUrl: '',
-    
         selectedDate: '',
         slots: [],
         selectedTime: '',
     
+        // --- TAMBAHAN UNTUK MODAL KONFIRMASI UMUM ---
+        isModalOpen: false,
+        modalTitle: '',
+        modalMessage: '',
+        actionUrl: '',
+        actionMethod: 'POST',
+        iconColor: 'bg-red-100 text-red-600',
+        confirmColor: 'bg-red-600 hover:bg-red-700',
+        confirmText: 'Konfirmasi',
+    
+        openModal(actionType, url) {
+            this.actionUrl = url;
+            this.isModalOpen = true;
+    
+            // Atur isi modal berdasarkan tombol aksi yang diklik
+            if (actionType === 'delete') {
+                this.modalTitle = 'Konfirmasi Hapus';
+                this.modalMessage = 'Apakah Anda yakin ingin menghapus data transaksi ini?';
+                this.actionMethod = 'DELETE';
+                this.iconColor = 'bg-red-100 text-red-600';
+                this.confirmColor = 'bg-red-600 hover:bg-red-700';
+                this.confirmText = 'Hapus';
+            } else if (actionType === 'approve') {
+                this.modalTitle = 'Approve Manual';
+                this.modalMessage = 'Apakah Anda yakin ingin menyetujui DP ini secara manual?';
+                this.actionMethod = 'POST';
+                this.iconColor = 'bg-yellow-100 text-yellow-600';
+                this.confirmColor = 'bg-yellow-500 hover:bg-yellow-600';
+                this.confirmText = 'Approve';
+            } else if (actionType === 'complete') {
+                this.modalTitle = 'Konfirmasi Pelunasan';
+                this.modalMessage = 'Tandai transaksi ini sebagai lunas?';
+                this.actionMethod = 'POST';
+                this.iconColor = 'bg-blue-100 text-blue-600';
+                this.confirmColor = 'bg-blue-600 hover:bg-blue-700';
+                this.confirmText = 'Konfirmasi Lunas';
+            }
+        },
+    
+        // --- FUNGSI RESCHEDULE ---
         openRescheduleModal(url, bookingId) {
             this.rescheduleUrl = url;
             this.bookingId = bookingId;
             this.isRescheduleModalOpen = true;
-    
             this.selectedDate = '';
             this.selectedTime = '';
             this.slots = [];
         },
     
         async fetchSlots() {
-            // Cek apakah data tanggal dan ID masuk dengan benar
-            console.log('Fetching untuk Tanggal:', this.selectedDate, '| Booking ID:', this.bookingId);
-    
-            if (!this.selectedDate || !this.bookingId) {
-                console.warn('Tanggal atau Booking ID kosong, membatalkan request.');
-                return;
-            }
+            if (!this.selectedDate || !this.bookingId) return;
     
             try {
                 let response = await fetch(`/admin/reschedule-slots/${this.bookingId}?date=${this.selectedDate}`);
-    
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     
                 let data = await response.json();
-    
-                // Cek bentuk data yang dikirim oleh backend Laravel
-                console.log('Data dari server:', data);
-    
-                // 2. PASTIKAN FORMAT DATA BENAR
-                // Jika backend me-return JSON: response()->json(['data' => $slots])
-                // maka gunakan: this.slots = data.data;
-                // Jika backend me-return array langsung, tetap gunakan:
                 this.slots = data;
-    
             } catch (error) {
                 console.error('Gagal mengambil jadwal:', error);
-                alert('Gagal mengambil jadwal dari server. Cek console log.');
             }
         }
     }">
