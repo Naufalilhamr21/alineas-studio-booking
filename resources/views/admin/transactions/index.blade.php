@@ -1,6 +1,8 @@
 <x-app-layout>
     <div x-data="{
-        expandedRow: null, // <-- TAMBAHKAN BARIS INI
+        // ... variabel sebelumnya ...
+        expandedRow: null,
+        bookingId: null, // 1. DEKLARASIKAN DISINI
     
         isRescheduleModalOpen: false,
         rescheduleUrl: '',
@@ -20,12 +22,36 @@
         },
     
         async fetchSlots() {
-            if (!this.selectedDate || !this.bookingId) return;
+            // Cek apakah data tanggal dan ID masuk dengan benar
+            console.log('Fetching untuk Tanggal:', this.selectedDate, '| Booking ID:', this.bookingId);
     
-            let response = await fetch(`/admin/reschedule-slots/${this.bookingId}?date=${this.selectedDate}`);
-            let data = await response.json();
+            if (!this.selectedDate || !this.bookingId) {
+                console.warn('Tanggal atau Booking ID kosong, membatalkan request.');
+                return;
+            }
     
-            this.slots = data;
+            try {
+                let response = await fetch(`/admin/reschedule-slots/${this.bookingId}?date=${this.selectedDate}`);
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+    
+                let data = await response.json();
+    
+                // Cek bentuk data yang dikirim oleh backend Laravel
+                console.log('Data dari server:', data);
+    
+                // 2. PASTIKAN FORMAT DATA BENAR
+                // Jika backend me-return JSON: response()->json(['data' => $slots])
+                // maka gunakan: this.slots = data.data;
+                // Jika backend me-return array langsung, tetap gunakan:
+                this.slots = data;
+    
+            } catch (error) {
+                console.error('Gagal mengambil jadwal:', error);
+                alert('Gagal mengambil jadwal dari server. Cek console log.');
+            }
         }
     }">
 
