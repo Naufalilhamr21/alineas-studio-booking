@@ -31,6 +31,18 @@
                 <div x-show="step === 1" x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                     class="max-w-md mx-auto">
+                    {{-- Tombol Back --}}
+                    <div class="mb-4 text-left">
+                        <button onclick="window.history.back()"
+                            class="bg-white border border-gray-200 text-gray-600 hover:text-red-600 hover:border-red-200 shadow-sm rounded-full px-4 py-2 transition flex items-center gap-2 text-sm font-semibold w-fit">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            Kembali
+                        </button>
+                    </div>
+                    
                     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 text-center">
                         <div
                             class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-5">
