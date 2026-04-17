@@ -314,8 +314,14 @@ class BookingController extends Controller
 
     public function getActiveLocks($packageId, Request $request)
     {
-        // 1. Bersihkan lock biasa yang sudah expired
-        BookingLock::where('expires_at', '<', now())->delete();
+        // 1. Ambil data lock biasa yang sudah expired
+        $expiredLocks = BookingLock::where('expires_at', '<', now())->get();
+
+        // PENTING: Siarkan (Broadcast) ke WebSocket sebelum dihapus agar layar pelanggan lain kembali normal (terbuka)
+        foreach ($expiredLocks as $lock) {
+            broadcast(new \App\Events\SlotUnlocked($lock->package_id, $lock->date, $lock->time, $lock->session_id));
+            $lock->delete();
+        }
 
         // 2. Ambil lock dari user yang sedang milih-milih jam (Kuning Biasa)
         $locks = BookingLock::where('date', $request->date)

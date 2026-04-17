@@ -42,7 +42,7 @@
                             Kembali
                         </button>
                     </div>
-                    
+
                     <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 text-center">
                         <div
                             class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-5">
@@ -420,11 +420,15 @@
                     this.calculateDays();
                     this.fetchCalendarStatus();
 
-
                     if (typeof Echo !== 'undefined') {
                         Echo.channel('alineas.calendar')
                             .listen('.SlotLocked', (e) => {
                                 this.addLock(e.date, e.time, e.userId);
+
+                                // Timer otomatis untuk melepas kuncian di browser setelah 5 menit
+                                setTimeout(() => {
+                                    this.removeLock(e.date, e.time);
+                                }, 300000);
                             })
                             .listen('.SlotUnlocked', (e) => {
                                 this.removeLock(e.date, e.time);
@@ -549,6 +553,27 @@
                             const data = await res.json();
                             if (!res.ok || data.status === 'failed') throw new Error(data
                                 .message || 'Gagal tersambung');
+
+                            // Bersihkan timer lama jika user mengklik jam lain
+                            if (this.myLockTimer) clearTimeout(this.myLockTimer);
+
+                            // Set timer 5 menit untuk pilihan user sendiri
+                            this.myLockTimer = setTimeout(() => {
+                                // Jika user belum pindah halaman/belum submit modal
+                                if (this.selectedTime === slot.time && !window
+                                    .isSubmittingForm) {
+                                    this.isBookingModalOpen =
+                                        false; // Tutup modal jika sedang terbuka
+                                    this.deselectTime(); // Batalkan pilihan jamnya
+
+                                    Swal.fire({
+                                        icon: 'info',
+                                        title: 'Waktu Habis',
+                                        text: 'Waktu tahan jadwal (5 menit) telah habis. Silakan pilih ulang jam pemotretan Anda.',
+                                        confirmButtonColor: '#DC2626'
+                                    });
+                                }
+                            }, 300000); // 5 menit
                         })
                         .catch(err => {
                             Swal.fire('Oops!', err.message, 'error');
