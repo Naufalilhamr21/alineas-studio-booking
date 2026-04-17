@@ -71,12 +71,12 @@
 
                         {{-- Rincian Biaya --}}
                         <div class="bg-gray-50 rounded-2xl p-5 mb-8 text-left">
-                            <div class="flex justify-between items-center mb-2 text-sm">
+                            <div class="flex justify-between items-center mb-2 text-xs md:text-sm">
                                 <span class="text-gray-500">Harga Paket Dasar (Max 4 orang)</span>
                                 <span class="font-semibold text-gray-800" x-text="formatRupiah(basePrice)"></span>
                             </div>
                             <div x-show="totalPax > maxPax"
-                                class="flex justify-between items-center mb-4 text-sm text-red-600">
+                                class="flex justify-between items-center mb-4 text-xs md:text-sm text-red-600">
                                 <span>Biaya Tambahan (<span x-text="totalPax - maxPax"></span> orang)</span>
                                 <span class="font-semibold"
                                     x-text="'+ ' + formatRupiah((totalPax - maxPax) * extraPrice)"></span>
