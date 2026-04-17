@@ -28,6 +28,16 @@
                 {{-- ========================================== --}}
                 {{-- TAHAP 1: FORM JUMLAH ORANG --}}
                 {{-- ========================================== --}}
+                <div class="mb-4">
+                    <a href="{{ route('front.package.show', $package->slug) }}" class="group flex items-center">
+                        <svg class="w-6 h-6 text-gray-700 group-hover:text-red-700 transition-colors duration-200"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                            </path>
+                        </svg>
+                    </a>
+                </div>
+
                 <div x-show="step === 1" x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
                     class="max-w-md mx-auto">
