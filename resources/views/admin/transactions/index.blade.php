@@ -77,21 +77,16 @@
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 min-h-[85vh] p-6 lg:p-8">
 
             {{-- HEADER BANNER --}}
-            <div class="mb-6 bg-gradient-to-r from-red-50 to-white p-8 rounded-3xl border border-red-100/50">
-                <div class="">
-                    <h1 class="text-lg md:text-2xl font-extrabold text-gray-900 tracking-tight">
+                <div class="mb-6">
+                    <h1 class="text-lg md:text-3xl font-extrabold text-gray-900 tracking-tight">
                         Daftar <span class="text-red-600">Transaksi</span>
                     </h1>
-                    <p class="text-gray-500 mt-2 text-sm md:text-base">
-                        Kelola daftar transaksi yang tersedia di studio.
-                    </p>
                 </div>
-            </div>
 
             {{-- SEARCH BAR --}}
             <div class="mb-6">
                 <form action="{{ route('admin.transactions.index') }}" method="GET"
-                    class="relative flex items-center max-w-md">
+                    class="relative flex items-center max-w-full">
 
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +134,7 @@
 
                 {{-- TABLE HEADER (Hanya Desktop) --}}
                 <div
-                    class="hidden md:grid grid-cols-12 gap-4 p-5 bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    class="hidden md:grid grid-cols-12 gap-4 p-5 bg-red-600 border-b border-gray-200 text-sm font-bold text-white tracking-tight">
                     <div class="col-span-3">Kode & Pelanggan</div>
                     <div class="col-span-4">Paket Foto</div>
                     <div class="col-span-3">Total Biaya</div>

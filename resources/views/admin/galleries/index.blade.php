@@ -12,14 +12,11 @@
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 min-h-[85vh] p-6 lg:p-8">
 
             <div
-                class="flex justify-between items-center mb-6 bg-gradient-to-r from-red-50 to-white p-8 rounded-3xl border border-red-100/50">
+                class="flex justify-between items-center mb-8">
                 <div class="pr-4">
-                    <h1 class="text-xl md:text-2xl font-extrabold text-gray-900 tracking-tight">
-                        Daftar <span class="text-red-600">Galeri Foto</span>
+                    <h1 class="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+                        Daftar <span class="text-red-600">Foto</span>
                     </h1>
-                    <p class="text-gray-500 mt-2 text-sm md:text-base">
-                        Upload hasil jepretan terbaik untuk ditampilkan di Galeri.
-                    </p>
                 </div>
                 <a href="{{ route('admin.galleries.create') }}"
                     class="px-2.5 py-2.5 bg-gray-700 hover:bg-red-700 text-white rounded-full transition">
@@ -32,9 +29,8 @@
             <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-200">
                 <div class="overflow-x-auto hide-scrollbar">
                     <table class="w-full text-left border-collapse">
-                        <thead class="bg-gray-50">
-                            <tr
-                                class="text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200">
+                        <thead class="bg-red-600">
+                            <tr class="text-sm font-bold text-white tracking-tight border-b border-red-700">
                                 <th class="p-4">Foto</th>
                                 <th class="p-4">Paket Terkait</th>
                                 <th class="p-4">Status</th>
@@ -118,8 +114,6 @@
                                                 </svg>
                                             </div>
                                             <p class="font-medium text-gray-500">Belum ada foto galeri.</p>
-                                            <p class="text-sm mt-1">Klik tombol tambah di atas untuk mengupload foto
-                                                pertama.</p>
                                         </div>
                                     </td>
                                 </tr>

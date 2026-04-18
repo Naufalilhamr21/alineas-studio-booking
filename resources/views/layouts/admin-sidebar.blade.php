@@ -35,8 +35,6 @@
 
         <div class="flex-1 py-6 space-y-8" :class="sidebarCollapsed ? 'px-2' : 'px-4'">
             <div>
-                <p x-show="!sidebarCollapsed"
-                    class="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Menu Utama</p>
                 <nav class="space-y-2">
                     <a href="{{ route('dashboard') }}" title="Dashboard"
                         class="relative group flex items-center text-sm font-semibold transition-all duration-200"
@@ -124,7 +122,7 @@
 
                     <div class="flex-shrink-0">
                         <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-tr from-red-600 to-red-400 flex items-center justify-center text-white font-bold shadow-sm">
+                            class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white font-bold shadow-sm">
                             {{ substr(Auth::user()->name ?? 'A', 0, 1) }}
                         </div>
                     </div>

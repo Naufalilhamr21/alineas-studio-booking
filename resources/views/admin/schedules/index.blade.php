@@ -6,30 +6,17 @@
     }">
 
         {{-- Header Banner --}}
-        <div
-            class="mb-8 bg-gradient-to-r from-red-50 to-white p-8 rounded-3xl border border-red-100/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-                <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight">
-                    Jadwal <span class="text-red-600">Operasional Studio</span>
-                </h1>
-                <p class="text-gray-500 mt-2 text-base">Atur tanggal tutup atau ubah jam operasional khusus untuk
-                    hari-hari tertentu.</p>
-            </div>
-            <div class="hidden md:block bg-red-100 p-3 rounded-2xl text-red-600">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                    </path>
-                </svg>
-            </div>
+        <div class="mb-6">
+            <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+                Jadwal <span class="text-red-600">Operasional Studio</span>
+            </h1>
         </div>
 
         {{-- Alert Messages --}}
         @if (session('success'))
             <div
                 class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-2xl flex items-center gap-3">
-                <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
+                <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
@@ -170,8 +157,7 @@
                         <div>
                             <label for="reason" class="block text-sm font-bold text-gray-700 mb-2">Keterangan <span
                                     class="text-gray-400 font-normal">(Opsional)</span></label>
-                            <input type="text" name="reason" id="reason"
-                                placeholder="Contoh: Libur Idul Fitri"
+                            <input type="text" name="reason" id="reason" placeholder="Contoh: Libur Idul Fitri"
                                 class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-100 focus:border-red-400 text-sm transition-all duration-200">
                         </div>
 
@@ -187,116 +173,119 @@
 
             {{-- Tabel Daftar Jadwal Khusus (Kolom Kanan) --}}
             <div class="lg:col-span-2">
-                <div class="bg-white overflow-hidden shadow-sm rounded-3xl border border-gray-100">
-                    <div class="p-6 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
+                <div class="bg-white border border-gray-100 rounded-3xl shadow-sm p-6">
+                    <div class="mb-6 flex justify-between items-center">
                         <h3 class="text-lg font-bold text-gray-800">Daftar Jadwal Khusus</h3>
                         <span
                             class="bg-gray-200 text-gray-700 py-1 px-3 rounded-full text-xs font-bold">{{ $schedules->count() }}
                             Jadwal</span>
                     </div>
 
-                    <div class="overflow-x-auto hide-scrollbar">
-                        <table class="w-full text-left border-collapse min-w-[500px]">
-                            <thead class="bg-gray-50">
-                                <tr
-                                    class="text-xs font-bold text-gray-500 uppercase tracking-wider border-b border-gray-200">
-                                    <th class="p-4 pl-6">Tanggal</th>
-                                    <th class="p-4">Status & Keterangan</th>
-                                    <th class="p-4 text-right pr-6">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100 text-sm">
-                                @forelse ($schedules as $schedule)
-                                    <tr class="hover:bg-gray-50/50 transition duration-200 group">
+                    <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100">
+                        <div class="overflow-x-auto hide-scrollbar">
+                            <table class="w-full text-left border-collapse min-w-[500px]">
+                                <thead class="bg-red-600">
+                                    <tr class="text-sm font-bold text-white tracking-tight border-b border-gray-200">
+                                        <th class="p-4 pl-6">Tanggal</th>
+                                        <th class="p-4">Status & Keterangan</th>
+                                        <th class="p-4 text-right pr-6">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 text-sm">
+                                    @forelse ($schedules as $schedule)
+                                        <tr class="hover:bg-gray-50/50 transition duration-200 group">
 
-                                        {{-- Kolom Tanggal --}}
-                                        <td class="p-4 pl-6 whitespace-nowrap">
-                                            <div class="font-bold text-gray-800">
-                                                {{ \Carbon\Carbon::parse($schedule->date)->locale('id')->translatedFormat('d F Y') }}
-                                            </div>
-                                            <div class="text-xs text-gray-500 mt-1 capitalize">
-                                                {{ \Carbon\Carbon::parse($schedule->date)->locale('id')->translatedFormat('l') }}
-                                            </div>
-                                        </td>
+                                            {{-- Kolom Tanggal --}}
+                                            <td class="p-4 pl-6 whitespace-nowrap">
+                                                <div class="font-bold text-gray-800">
+                                                    {{ \Carbon\Carbon::parse($schedule->date)->locale('id')->translatedFormat('d F Y') }}
+                                                </div>
+                                                <div class="text-xs text-gray-500 mt-1 capitalize">
+                                                    {{ \Carbon\Carbon::parse($schedule->date)->locale('id')->translatedFormat('l') }}
+                                                </div>
+                                            </td>
 
-                                        {{-- Kolom Status & Keterangan --}}
-                                        <td class="p-4">
-                                            @if ($schedule->is_closed)
-                                                <span
-                                                    class="inline-flex items-center gap-1.5 bg-red-50 border border-red-100 text-red-700 px-2.5 py-1 rounded-lg text-xs font-bold">
-                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
-                                                        </path>
-                                                    </svg>
-                                                    Tutup
-                                                </span>
-                                            @else
-                                                <span
-                                                    class="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 text-blue-700 px-2.5 py-1 rounded-lg text-xs font-bold">
-                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
-                                                    Buka:
-                                                    {{ \Carbon\Carbon::parse($schedule->open_time)->format('H:i') }} -
-                                                    {{ \Carbon\Carbon::parse($schedule->close_time)->format('H:i') }}
-                                                </span>
-                                            @endif
+                                            {{-- Kolom Status & Keterangan --}}
+                                            <td class="p-4">
+                                                @if ($schedule->is_closed)
+                                                    <span
+                                                        class="inline-flex items-center gap-1.5 bg-red-50 border border-red-100 text-red-700 px-2.5 py-1 rounded-lg text-xs font-bold">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                                                            </path>
+                                                        </svg>
+                                                        Tutup
+                                                    </span>
+                                                @else
+                                                    <span
+                                                        class="inline-flex items-center gap-1.5 bg-blue-50 border border-blue-100 text-blue-700 px-2.5 py-1 rounded-lg text-xs font-bold">
+                                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                        </svg>
+                                                        Buka:
+                                                        {{ \Carbon\Carbon::parse($schedule->open_time)->format('H:i') }}
+                                                        -
+                                                        {{ \Carbon\Carbon::parse($schedule->close_time)->format('H:i') }}
+                                                    </span>
+                                                @endif
 
-                                            @if ($schedule->reason)
-                                                <div class="text-sm text-gray-600 mt-1.5 font-medium">
-                                                    {{ $schedule->reason }}</div>
-                                            @endif
-                                        </td>
+                                                @if ($schedule->reason)
+                                                    <div class="text-sm text-gray-600 mt-1.5 font-medium">
+                                                        {{ $schedule->reason }}</div>
+                                                @endif
+                                            </td>
 
-                                        {{-- Kolom Aksi --}}
-                                        <td class="p-4 text-right pr-6 whitespace-nowrap">
-                                            {{-- Tombol untuk membuka Modal --}}
-                                            <button type="button"
-                                                @click="
+                                            {{-- Kolom Aksi --}}
+                                            <td class="p-4 text-right pr-6 whitespace-nowrap">
+                                                {{-- Tombol untuk membuka Modal --}}
+                                                <button type="button"
+                                                    @click="
                                                     openDeleteModal = true; 
                                                     deleteUrl = '{{ route('admin.schedules.destroy', $schedule->id) }}';
                                                     deleteDate = '{{ \Carbon\Carbon::parse($schedule->date)->locale('id')->translatedFormat('d F Y') }}';
                                                 "
-                                                class="text-sm font-semibold text-gray-400 hover:text-red-600 transition-colors flex items-center justify-end ml-auto">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                    </path>
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="3" class="p-10 text-center">
-                                            <div
-                                                class="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-gray-50 mb-3 border border-gray-100">
-                                                <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24"
-                                                    stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                </svg>
-                                            </div>
-                                            <p class="text-sm font-bold text-gray-900">Belum ada pengaturan jadwal
-                                                khusus</p>
-                                            <p class="text-sm text-gray-500 mt-1">Studio saat ini beroperasi setiap
-                                                hari dengan jadwal reguler (11:00 - 18:00).</p>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                                    class="text-sm font-semibold text-gray-400 hover:text-red-600 transition-colors flex items-center justify-end ml-auto">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                        </path>
+                                                    </svg>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="3" class="p-10 text-center">
+                                                <div
+                                                    class="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-gray-50 mb-3 border border-gray-100">
+                                                    <svg class="h-6 w-6 text-gray-400" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                                <p class="text-sm font-bold text-gray-900">Belum ada pengaturan jadwal
+                                                    khusus</p>
+                                                <p class="text-sm text-gray-500 mt-1">Studio saat ini beroperasi setiap
+                                                    hari dengan jadwal reguler (11:00 - 18:00).</p>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
         </div>
