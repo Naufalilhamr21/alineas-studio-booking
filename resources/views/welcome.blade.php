@@ -27,15 +27,15 @@
                     <div
                         class="bg-gray-900 h-64 md:h-80 rounded-2xl p-4 flex flex-col justify-between hover:bg-gray-800 transition relative overflow-hidden border hover:border-red-600 hover:border-2">
 
-                        {{-- @if ($package->thumbnail)
+                        @if ($package->thumbnail)
                             <img src="{{ Storage::disk('s3')->url($package->thumbnail) }}""
                                 class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 transition duration-500">
-                        @endif --}}
+                        @endif
 
-                        @if ($package->thumbnail)
+                        {{-- @if ($package->thumbnail)
                             <img src="{{ asset('storage/' . $package->thumbnail) }}"
                                 class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 transition duration-500">
-                        @endif
+                        @endif --}}
 
                         <div
                             class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent opacity-90">
@@ -87,19 +87,19 @@
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 pb-2">
                 @foreach ($packages as $package)
-                    {{-- @php
+                    @php
                         $galleryImage = $package->galleries->first();
                         $imageSource = $galleryImage
                             ? Storage::disk('s3')->url($galleryImage->image_path)
                             : Storage::disk('s3')->url($package->thumbnail);
-                    @endphp --}}
+                    @endphp
 
-                    @php
+                    {{-- @php
                         $galleryImage = $package->galleries->first();
                         $imageSource = $galleryImage
                             ? asset('storage/' . $galleryImage->image_path)
                             : asset('storage/' . $package->thumbnail);
-                    @endphp 
+                    @endphp  --}}
 
                     <a href="{{ route('gallery', ['package' => $package->id]) }}" class="group block w-full">
                         <div class="w-full h-64 md:h-80 rounded-xl overflow-hidden relative shadow-md">
