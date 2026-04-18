@@ -82,7 +82,7 @@
                                     {{-- CUSTOMER --}}
                                     <td class="p-4">
                                         <div class="font-bold text-gray-800">{{ $booking->user->name }}</div>
-                                        <div class="text-xs text-gray-500">{{ $booking->package->name }}</div>
+                                        <div class="text-xs text-gray-500 mt-1">{{ $booking->package->name }}</div>
                                     </td>
 
                                     {{-- STATUS --}}
