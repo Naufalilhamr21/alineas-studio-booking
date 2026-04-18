@@ -83,7 +83,7 @@
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 min-h-[85vh] p-6 lg:p-8">
 
             <div
-                class="flex justify-start gap-5 items-center mb-6 bg-gradient-to-r from-red-50 to-white p-8 rounded-3xl border border-red-100/50">
+                class="flex justify-start gap-5 items-center mb-8">
                 <a href="{{ route('admin.galleries.index') }}"
                     class="bg-gray-700 text-white w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-700 transition shadow-sm">
                     <svg class="w-6 h-6 text-white-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,80 +112,87 @@
                     enctype="multipart/form-data">
                     @csrf
 
-                    <div class="pb-5">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">File Foto <span
-                                class="text-red-600">*</span></label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="block text-sm font-bold text-gray-700 mb-2">File Foto <span
+                                    class="text-red-600">*</span></label>
 
-                        <input type="file" name="image" id="image" class="hidden" x-ref="photo"
-                            accept="image/png, image/jpeg, image/jpg" x-on:change="handleFileUpload($event)">
+                            <input type="file" name="image" id="image" class="hidden" x-ref="photo"
+                                accept="image/png, image/jpeg, image/jpg" x-on:change="handleFileUpload($event)">
 
-                        <div class="mt-2" x-show="!photoPreview">
-                            <div x-on:click.prevent="$refs.photo.click()"
-                                class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-red-50 hover:border-red-400 transition"
-                                id="dropzone-container">
-                                <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
-                                    <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
+                            <div class="mt-2" x-show="!photoPreview">
+                                <div x-on:click.prevent="$refs.photo.click()"
+                                    class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-red-50 hover:border-red-400 transition"
+                                    id="dropzone-container">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                                        <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                            </path>
+                                        </svg>
+                                        <p class="mb-2 text-sm text-gray-500 font-semibold">Klik untuk upload foto</p>
+                                        <p class="text-xs text-gray-500">Format: JPG, PNG (Max 2MB)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 relative" x-show="photoPreview" style="display: none;">
+                                <span
+                                    class="block w-full h-80 rounded-xl bg-contain bg-center bg-no-repeat shadow-sm border border-gray-200 bg-gray-50"
+                                    x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+                                </span>
+                                <button type="button" x-on:click.prevent="$refs.photo.click()"
+                                    class="absolute top-4 right-4 bg-white/90 text-gray-700 hover:text-red-600 px-4 py-2 rounded-full shadow-md text-sm font-bold transition flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
                                         </path>
                                     </svg>
-                                    <p class="mb-2 text-sm text-gray-500 font-semibold">Klik untuk upload foto</p>
-                                    <p class="text-xs text-gray-500">Format: JPG, PNG (Max 2MB)</p>
+                                    Ganti Foto
+                                </button>
+                            </div>
+
+                            @error('image')
+                                <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="col-span-2 md:col-span-1">
+                            <div class="mb-6">
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Kategori Paket
+                                    (Opsional)</label>
+                                <select name="package_id" id="package_id"
+                                    class="w-full rounded-xl border-gray-300 focus:border-red-500 focus:ring-red-500 shadow-sm cursor-pointer">
+                                    <option value="">Umum (Tanpa Kategori Paket)</option>
+                                    @foreach ($packages as $package)
+                                        <option value="{{ $package->id }}"
+                                            {{ old('package_id') == $package->id ? 'selected' : '' }}>
+                                            {{ $package->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="flex items-center p-4 border border-gray-200 rounded-xl bg-gray-50 hover:bg-red-50 hover:border-red-200 transition cursor-pointer"
+                                onclick="document.getElementById('feat').click()">
+                                <input type="checkbox" name="is_featured" id="feat" value="1"
+                                    {{ old('is_featured') ? 'checked' : '' }}
+                                    class="w-5 h-5 rounded border-gray-300 text-red-600 focus:ring-red-500 cursor-pointer pointer-events-none">
+                                <div class="ml-3">
+                                    <label class="text-sm font-bold text-gray-800 cursor-pointer pointer-events-none">
+                                        Jadikan Featured?
+                                    </label>
+                                    <p class="text-xs text-gray-500 mt-0.5">Foto ini akan diprioritaskan tampil di
+                                        halaman utama
+                                        / beranda.</p>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="mt-2 relative" x-show="photoPreview" style="display: none;">
-                            <span
-                                class="block w-full h-80 rounded-xl bg-contain bg-center bg-no-repeat shadow-sm border border-gray-200 bg-gray-50"
-                                x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
-                            </span>
-                            <button type="button" x-on:click.prevent="$refs.photo.click()"
-                                class="absolute top-4 right-4 bg-white/90 text-gray-700 hover:text-red-600 px-4 py-2 rounded-full shadow-md text-sm font-bold transition flex items-center gap-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                                    </path>
-                                </svg>
-                                Ganti Foto
-                            </button>
-                        </div>
-
-                        @error('image')
-                            <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p>
-                        @enderror
                     </div>
 
-                    <div class="pb-5">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Kategori Paket (Opsional)</label>
-                        <select name="package_id" id="package_id"
-                            class="w-full rounded-xl border-gray-300 focus:border-red-500 focus:ring-red-500 shadow-sm cursor-pointer">
-                            <option value="">Umum (Tanpa Kategori Paket)</option>
-                            @foreach ($packages as $package)
-                                <option value="{{ $package->id }}"
-                                    {{ old('package_id') == $package->id ? 'selected' : '' }}>
-                                    {{ $package->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <p class="text-xs text-gray-500 mt-1.5">*Pilih paket jika Anda ingin foto ini muncul sebagai
-                            referensi di halaman paket tersebut.</p>
-                    </div>
 
-                    <div class="flex items-center p-4 border border-gray-200 rounded-xl bg-gray-50 hover:bg-red-50 hover:border-red-200 transition cursor-pointer"
-                        onclick="document.getElementById('feat').click()">
-                        <input type="checkbox" name="is_featured" id="feat" value="1"
-                            {{ old('is_featured') ? 'checked' : '' }}
-                            class="w-5 h-5 rounded border-gray-300 text-red-600 focus:ring-red-500 cursor-pointer pointer-events-none">
-                        <div class="ml-3">
-                            <label class="text-sm font-bold text-gray-800 cursor-pointer pointer-events-none">
-                                Jadikan Featured?
-                            </label>
-                            <p class="text-xs text-gray-500 mt-0.5">Foto ini akan diprioritaskan tampil di halaman utama
-                                / beranda.</p>
-                        </div>
-                    </div>
+
 
                     <div class="flex justify-end mt-6">
                         <button type="button" @click="validateAndConfirm()"

@@ -11,8 +11,7 @@
 
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 min-h-[85vh] p-6 lg:p-8">
 
-            <div
-                class="flex justify-between items-center mb-8 rounded-3xl">
+            <div class="flex justify-between items-center mb-8 rounded-3xl">
                 <div class="pr-4">
                     <h1 class="text-xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
                         Daftar <span class="text-red-600">Paket Foto</span>
@@ -26,24 +25,23 @@
                 </a>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            @if (session('success'))
+                <div
+                    class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 mx-6 mt-6 rounded-r-lg flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                        </path>
+                    </svg>
+                    <span class="font-medium">{{ session('success') }}</span>
+                </div>
+            @endif
 
-                @if (session('success'))
-                    <div
-                        class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 mx-6 mt-6 rounded-r-lg flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                            </path>
-                        </svg>
-                        <span class="font-medium">{{ session('success') }}</span>
-                    </div>
-                @endif
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
                 <div class="overflow-x-auto hide-scrollbar">
                     <table class="w-full min-w-[700px] text-left border-collapse">
                         <thead class="bg-red-600">
-                            <tr
-                                class="text-sm font-bold text-white tracking-tight">
+                            <tr class="text-sm font-bold text-white tracking-tight">
                                 <th class="p-4">Foto</th>
                                 <th class="p-4">Nama Paket</th>
                                 <th class="p-4">Harga & Kapasitas</th>
@@ -58,11 +56,11 @@
 
                                     {{-- FOTO --}}
                                     <td class="p-4">
-                                        <div    
+                                        <div
                                             class="h-12 w-12 rounded-lg bg-gray-100 overflow-hidden shadow-sm border border-gray-200">
-                                            <img src="{{ Storage::disk('s3')->url($package->thumbnail) }}"
-                                            {{-- <img src="{{ asset('storage/' . $package->thumbnail) }}" --}}
-                                                alt="{{ $package->name }}" class="h-full w-full object-cover">
+                                            {{-- <img src="{{ Storage::disk('s3')->url($package->thumbnail) }}" --}}
+                                                <img src="{{ asset('storage/' . $package->thumbnail) }}" alt="{{ $package->name }}"
+                                                class="h-full w-full object-cover">
                                         </div>
                                     </td>
 

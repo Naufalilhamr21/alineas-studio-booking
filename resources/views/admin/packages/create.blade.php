@@ -96,7 +96,7 @@
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 min-h-[85vh] p-6 lg:p-8">
 
             <div
-                class="flex justify-start gap-5 items-center mb-6 bg-gradient-to-r from-red-50 to-white p-8 rounded-3xl border border-red-100/50">
+                class="flex justify-start gap-5 items-center mb-8">
                 <a href="{{ route('admin.packages.index') }}"
                     class="bg-gray-700 text-white w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-700 transition">
                     <svg class="w-6 h-6 text-white-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +128,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
-                        <div class="col-span-2">
+                        <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Package Name <span
                                     class="text-red-500">*</span></label>
                             <input type="text" name="name" id="name" value="{{ old('name') }}" required
@@ -139,7 +139,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-span-2">
+                        <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Tagline (Deskripsi Singkat) <span
                                     class="text-red-500">*</span></label>
                             <input type="text" name="tagline" id="tagline"
@@ -150,7 +150,7 @@
                             @enderror
                         </div>
 
-                        <div>
+                        <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Price (IDR) <span
                                     class="text-red-500">*</span></label>
                             <input type="number" name="price" id="price" value="{{ old('price') }}" required
@@ -163,7 +163,7 @@
                             @enderror
                         </div>
 
-                        <div>
+                        <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Duration (Minutes) <span
                                     class="text-red-500">*</span></label>
                             <input type="number" name="duration_minutes" id="duration_minutes"
@@ -177,8 +177,7 @@
                             @enderror
                         </div>
 
-                        {{-- INPUT BARU: MAX PAX --}}
-                        <div>
+                        <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Maksimal Orang (Max Pax) <span
                                     class="text-red-500">*</span></label>
                             <input type="number" name="max_pax" id="max_pax" value="{{ old('max_pax', 1) }}"
@@ -192,8 +191,7 @@
                             @enderror
                         </div>
 
-                        {{-- INPUT BARU: EXTRA PRICE PER PAX --}}
-                        <div>
+                        <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Biaya Tambahan / Orang (IDR) <span
                                     class="text-red-500">*</span></label>
                             <input type="number" name="extra_price_per_pax" id="extra_price_per_pax"
@@ -207,10 +205,10 @@
                             @enderror
                         </div>
 
-                        <div class="col-span-2">
+                        <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-bold text-gray-700 mb-2">List Benefit <span
                                     class="text-red-500">*</span></label>
-                            <textarea name="benefit" id="benefit" rows="4"
+                            <textarea name="benefit" id="benefit" rows="6"
                                 class="w-full rounded-xl border-gray-300 focus:border-red-500 focus:ring-red-500 shadow-sm transition"
                                 placeholder="Cth:&#10;• 30 Menit sesi foto&#10;• 10 Soft file edit">{{ old('benefit') }}</textarea>
                             @error('benefit')
@@ -218,7 +216,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-span-2">
+                        <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-bold text-gray-700 mb-2">Thumbnail Image <span
                                     class="text-red-500">*</span></label>
 
