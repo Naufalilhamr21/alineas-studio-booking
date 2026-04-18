@@ -49,9 +49,9 @@
                     <table class="w-full text-left border-collapse">
                         <thead class="bg-red-600">
                             <tr class="text-sm font-bold text-white tracking-tight border-b">
-                                <th class="p-4 pl-12">Waktu</th>
+                                <th class="p-4 pl-8">Waktu</th>
                                 <th class="p-4">Customer & Paket</th>
-                                <th class="p-4 text-right pr-12">Status Bayar</th>
+                                <th class="p-4 text-right pr-8">Status Bayar</th>
                             </tr>
                         </thead>
 
@@ -60,7 +60,7 @@
                                 <tr class="hover:bg-gray-50 transition">
 
                                     {{-- WAKTU --}}
-                                    <td class="p-4 pl-12 whitespace-nowrap">
+                                    <td class="p-4 pl-8 whitespace-nowrap">
                                         @if (\Carbon\Carbon::parse($booking->start_time)->isToday())
                                             <span
                                                 class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-[10px] font-bold">
@@ -86,7 +86,7 @@
                                     </td>
 
                                     {{-- STATUS --}}
-                                    <td class="p-4 pr-12 text-right">
+                                    <td class="p-4 pr-8 text-right">
                                         @if ($booking->remaining_balance <= 0)
                                             <span
                                                 class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">
