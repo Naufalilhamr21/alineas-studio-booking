@@ -83,9 +83,6 @@
                                     <td class="p-4">
                                         <div class="font-bold text-gray-800">{{ $booking->user->name }}</div>
                                         <div class="text-xs text-gray-500">{{ $booking->package->name }}</div>
-                                        <div class="text-[11px] text-gray-400 mt-1">
-                                            {{ $booking->user->phone ?? '-' }}
-                                        </div>
                                     </td>
 
                                     {{-- STATUS --}}
