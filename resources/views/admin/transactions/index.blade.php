@@ -97,7 +97,7 @@
 
                     <input type="text" name="search" value="{{ request('search') }}"
                         class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-red-500 focus:border-red-500 shadow-sm text-sm transition-all duration-300"
-                        placeholder="Cari Kode Booking atau Nama...">
+                        placeholder="Cari Kode Booking atau Nama Pelanggan">
 
                     @if (request('search'))
                         <a href="{{ route('admin.transactions.index') }}"
