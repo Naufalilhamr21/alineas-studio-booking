@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\Booking;
-use App\Models\StudioSchedule; // Model Baru
+use App\Models\StudioSchedule;
 use Illuminate\Support\Carbon;
 
 class BookingService

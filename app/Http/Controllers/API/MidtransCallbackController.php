@@ -10,6 +10,7 @@ use Midtrans\Config;
 use Midtrans\Notification;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\AdminNewBookingMail;
+use App\Mail\BookingInvoiceMail;
 use App\Events\NewBookingCreated;
 
 class MidtransCallbackController extends Controller
@@ -77,18 +78,40 @@ class MidtransCallbackController extends Controller
         // 6. BROADCAST KE FRONTEND JIKA ADA PERUBAHAN STATUS PENTING
         // -------------------------------------------------------------------
         
-        // JIKA STATUS BERUBAH MENJADI LUNAS (PAID) HARI INI
         if ($oldStatus !== 'paid' && $booking->status === 'paid') {
-            // Notif ke dashboard Admin
+
+            // Notif realtime dashboard admin
             NewBookingCreated::dispatch($booking);
 
-            // Notif via Email ke Admin
+            // =========================
+            // EMAIL INVOICE CUSTOMER
+            // =========================
             try {
-                Mail::to('alineasstudio@gmail.com')->send(new AdminNewBookingMail($booking));
+
+                Mail::to($booking->user->email)
+                    ->send(new BookingInvoiceMail($booking));
+
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Gagal kirim email lunas: ' . $e->getMessage());
+
+                \Illuminate\Support\Facades\Log::error(
+                    'Gagal kirim invoice customer: ' . $e->getMessage()
+                );
             }
 
+            // =========================
+            // EMAIL NOTIF ADMIN
+            // =========================
+            try {
+
+                Mail::to('alineasstudio@gmail.com')
+                    ->send(new AdminNewBookingMail($booking));
+
+            } catch (\Exception $e) {
+
+                \Illuminate\Support\Facades\Log::error(
+                    'Gagal kirim email admin: ' . $e->getMessage()
+                );
+            }
         }
 
         // Refresh Kalender di Frontend jika status berubah menjadi paid atau cancelled

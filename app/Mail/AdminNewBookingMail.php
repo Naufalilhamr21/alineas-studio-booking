@@ -23,7 +23,7 @@ class AdminNewBookingMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '🎉 Ada Booking Baru: ' . $this->booking->package->name,
+            subject: 'Ada bookingan masuk!: ' . $this->booking->package->name,
         );
     }
 
