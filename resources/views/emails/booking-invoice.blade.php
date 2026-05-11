@@ -9,7 +9,7 @@
 <body>
     <h2>Invoice Booking Alineas Studio</h2>
 
-    <p>Halo, {{ $booking->customer_name }}</p>
+    <p>Halo, {{ $booking->user->name }}</p>
 
     <p>Terima kasih telah melakukan booking.</p>
 
@@ -30,12 +30,15 @@
 
         <tr>
             <td>Tanggal</td>
-            <td>: {{ $booking->booking_date }}</td>
+            <td>:
+                {{ \Carbon\Carbon::parse($booking->start_time)->timezone('Asia/Jakarta')->locale('id')->isoFormat('dddd, D MMMM Y') }}
+            </td>
         </tr>
 
         <tr>
             <td>Jam</td>
-            <td>: {{ $booking->start_time }}</td>
+            <td>: {{ \Carbon\Carbon::parse($booking->start_time)->timezone('Asia/Jakarta')->format('H:i') }} -
+                {{ \Carbon\Carbon::parse($booking->end_time)->timezone('Asia/Jakarta')->format('H:i') }} WIB</td>
         </tr>
 
         <tr>
@@ -44,15 +47,21 @@
         </tr>
 
         <tr>
-            <td>Status</td>
-            <td>: {{ $booking->payment_status }}</td>
+            <td>DP</td>
+            <td>: Rp {{ number_format($booking->dp_amount, 0, ',', '.') }}</td>
+        </tr>
+
+        <tr>
+            <td>Sisa Pelunasan</td>
+            <td>: Rp {{ number_format($booking->remaining_balance, 0, ',', '.') }}</td>
         </tr>
     </table>
 
     <hr>
 
     <p>
-        Jika ada pertanyaan silakan hubungi admin Alineas Studio.
+        Jika ada pertanyaan silakan hubungi admin Alineas Studio. <br>Whatsapp: <a href="https://wa.me/6285213385280"
+            target="_blank">0852-1338-5280</a>
     </p>
 
 </body>
